@@ -8,7 +8,7 @@ import com.elec390coen.alcoroam.R;
 
 public class LoginActivity extends AppCompatActivity {
 
-    TextView t;
+    TextView t2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
