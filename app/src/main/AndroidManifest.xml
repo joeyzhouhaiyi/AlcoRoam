@@ -16,6 +16,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Activities.Alcohol.AlcoholActivity" />
+        <activity android:name=".Activities.Login.LoginActivity" />
+        <activity android:name=".Activities.HeartRate.HeartActivity" />
+        <activity android:name=".Activities.Setting.SettingActivity" />
+        <activity android:name=".Activities.Splash.SplashActivity"></activity>
     </application>
 
 </manifest>
