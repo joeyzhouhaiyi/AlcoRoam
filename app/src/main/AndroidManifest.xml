@@ -10,14 +10,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity android:name=".Activities.Main.MainActivity">
+
+        </activity>
+        <activity android:name=".Activities.Alcohol.AlcoholActivity" />
+        <activity android:name=".Activities.Login.LoginActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.Alcohol.AlcoholActivity" />
-        <activity android:name=".Activities.Login.LoginActivity" />
+
         <activity android:name=".Activities.HeartRate.HeartActivity" />
         <activity android:name=".Activities.Setting.SettingActivity" />
         <activity android:name=".Activities.Splash.SplashActivity"></activity>
