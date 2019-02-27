@@ -8,4 +8,17 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="MyDialog" parent="android:style/Theme.Dialog">
+        <!--transparent bg-->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!--no title -->
+        <item name="android:windowNoTitle">true</item>
+        <!--remove border-->
+        <item name="android:windowFrame">@null</item>
+        <!-- float on top of activity-->
+        <item name="android:windowIsFloating">true</item>
+        <!--Dim-->
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
 </resources>
