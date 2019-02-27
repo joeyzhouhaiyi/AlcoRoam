@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.elec390coen.alcoroam.Controllers.FireBaseHelper;
 import com.elec390coen.alcoroam.R;
 
 public class SettingActivity extends AppCompatActivity {
@@ -21,7 +22,7 @@ public class SettingActivity extends AppCompatActivity {
     String emailTxt;
     String nameTxt;
 
-
+    FireBaseHelper fireBaseHelper;
 
 
 
@@ -36,17 +37,17 @@ public class SettingActivity extends AppCompatActivity {
         name = findViewById(R.id.contactName);
 
         saveBTN = findViewById(R.id.saveBtn);
-
+        fireBaseHelper = new FireBaseHelper();
         //retrieve the data from SharedPreferences
 
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        String phoneString = pref.getString("", phoneTxt);
+        String phoneString = pref.getString("phone", "");
         phoneNumber.setText(phoneString);
 
-        String emailString = pref.getString("", emailTxt);
+        String emailString = pref.getString("email", "");
         email.setText(emailString);
 
-        String nameString = pref.getString("", nameTxt);
+        String nameString = pref.getString("name", "");
         name.setText(nameString);
 
 
@@ -64,12 +65,12 @@ public class SettingActivity extends AppCompatActivity {
                 }
                 else{
 //                    saveToTxtFile(mText);
-                    SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(SettingActivity.this);
+                    SharedPreferences pref = getSharedPreferences(fireBaseHelper.getCurrentUser().getUid(),MODE_PRIVATE);
                     SharedPreferences.Editor editor = pref.edit();
 
-                    editor.putString("", phoneTxt);
-                    editor.putString("", emailTxt);
-                    editor.putString("", nameTxt);
+                    editor.putString("phone", phoneTxt);
+                    editor.putString("email", emailTxt);
+                    editor.putString("name", nameTxt);
                     editor.apply();
                 }
 
