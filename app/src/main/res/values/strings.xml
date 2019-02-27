@@ -7,4 +7,5 @@
     <string name="sign_in">Sign in</string>
     <string name="new_user">New to AlcoRoam?</string>
     <string name="log_in">Log in</string>
+    <string name="password_re">Confirm Password</string>
 </resources>
