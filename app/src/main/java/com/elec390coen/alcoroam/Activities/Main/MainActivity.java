@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.elec390coen.alcoroam.Activities.Setting.SettingActivity;
+import com.elec390coen.alcoroam.Activities.bluetooth.BluetoothActivity;
 import com.elec390coen.alcoroam.R;
 
 public class MainActivity extends AppCompatActivity {
@@ -27,5 +28,13 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, SettingActivity.class));
             }
         });
+        btn_bluetooth = findViewById(R.id.btn_bluetooth);
+        btn_bluetooth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, BluetoothActivity.class));
+            }
+        });
+
     }
 }
