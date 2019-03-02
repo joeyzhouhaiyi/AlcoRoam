@@ -16,14 +16,6 @@
         android:layout_marginTop="35dp"
         android:textSize="20sp"/>
 
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/visible"
-        android:text="Visible"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="35dp"
-        android:textSize="20sp"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -35,14 +27,20 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_action_name"
+        android:src="@drawable/ic_bluetooth"
         android:padding="10dp"
         android:layout_below="@+id/name_bt"
         android:id="@+id/search_bt"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="15dp"
         android:background="#207bb4"
         />
+    <Button
+        android:id="@+id/btn_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="X"
+        android:layout_toRightOf="@+id/search_bt"/>
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
