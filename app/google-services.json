@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "796465243268",
+    "firebase_url": "https://alcoroam.firebaseio.com",
+    "project_id": "alcoroam",
+    "storage_bucket": "alcoroam.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:796465243268:android:851d1ed4685e954c",
+        "android_client_info": {
+          "package_name": "com.elec390coen.alcoroam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "796465243268-sbfjj5ejidid3t80p7j540imp6octvrn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.elec390coen.alcoroam",
+            "certificate_hash": "cb80d6d1f1865f4d8c288746efd89670fe621408"
+          }
+        },
+        {
+          "client_id": "796465243268-j6e93miv68d41e3kjnvakb0rv87flu8n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC54yQHP_6ymO1SO9OcjAToXhO1O13gYAU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "796465243268-j6e93miv68d41e3kjnvakb0rv87flu8n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
