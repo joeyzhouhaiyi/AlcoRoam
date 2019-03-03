@@ -142,7 +142,7 @@ public class BluetoothActivity extends AppCompatActivity {
             String info = ((TextView) v).getText().toString();
             String address = info.substring(info.length() - 17);
 
-            new ConnectBT(BluetoothActivity.this,"00:07:80:0E:B1:0C").execute();
+            new ConnectBT(BluetoothActivity.this,address).execute();
         }
     };
 
