@@ -28,36 +28,46 @@ import java.util.Set;
 
 public class BluetoothActivity extends AppCompatActivity {
     private BluetoothAdapter BTAdapter;
-    private Set<BluetoothDevice> pairedDevices;
     public static String EXTRA_ADDRESS = "device_address";
     CheckBox enable_bt;
-    ImageView search_bt;
     TextView name_bt;
+    TextView tv_address;
     ListView listview;
     ArrayList list;
-    Button btn_cancel;
+    Button btn_search;
     ArrayAdapter adapter;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.style_activity_bluetooth);
 
         enable_bt = findViewById(R.id.enable_bt);
-        search_bt = findViewById(R.id.search_bt);
         name_bt = findViewById(R.id.name_bt);
+        tv_address = findViewById(R.id.device_address);
         listview = findViewById(R.id.list_view);
         list = new ArrayList();
-        btn_cancel = findViewById(R.id.btn_cancel);
-        btn_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                BTAdapter.cancelDiscovery();
-            }
-        });
-
-        adapter = new ArrayAdapter(BluetoothActivity.this, android.R.layout.simple_list_item_1, list );
+        btn_search = findViewById(R.id.btn_cancel);
+        adapter = new ArrayAdapter(BluetoothActivity.this, android.R.layout.simple_list_item_1, list);
         listview.setAdapter(adapter);
         listview.setOnItemClickListener(myListClickListener);
+
+        btn_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(btn_search.getText().toString().equals(getString(R.string.search)))
+                {
+                    btn_search.setText(R.string.stop);
+                    searchForDevice();
+
+                }else {
+                    unregisterReceiver(bReciever);
+                    BTAdapter.cancelDiscovery();
+                    btn_search.setText(R.string.search);
+                }
+            }
+        });
 
 
         BTAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -68,6 +78,7 @@ public class BluetoothActivity extends AppCompatActivity {
         }else
         {
             name_bt.setText(getBTName());
+            tv_address.setText("Your device address: "+BTAdapter.getAddress());
             if(BTAdapter.isEnabled()){
                 enable_bt.setChecked(true);
             }
@@ -88,39 +99,30 @@ public class BluetoothActivity extends AppCompatActivity {
                 }
             }
         });
-
-        search_bt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                list();
-            }
-        });
     }
 
-    //paired method and show the device name and address
-    private void list(){
-        /*
-        pairedDevices = BTAdapter.getBondedDevices();
-        ArrayList list = new ArrayList();
-        for(BluetoothDevice bt : pairedDevices) {
-            list.add("name:"+bt.getName() +" \naddress:"+ bt.getAddress() +" \nbound state:"+ bt.getBondState());
-        }
-        */
+    //search for device and show the device name and address
+    private void searchForDevice(){
 
+        //setup intent filter and register receiver
         IntentFilter filter = new IntentFilter();
         filter.addAction(BluetoothDevice.ACTION_FOUND);
         filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
         filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
         registerReceiver(bReciever, filter);
-        int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 1;
+
+        //request location permission
+        int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_AND_FINE_LOCATION = 1;
         ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION);
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},
+                MY_PERMISSIONS_REQUEST_ACCESS_COARSE_AND_FINE_LOCATION);
+
         BTAdapter.startDiscovery();
         Toast.makeText(this,"Searching for Devices", Toast.LENGTH_SHORT).show();
 
     }
+
+    //get current device name, if name is null get its address
     public String getBTName(){
         if (BTAdapter == null){
             BTAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -144,23 +146,23 @@ public class BluetoothActivity extends AppCompatActivity {
         }
     };
 
-
+    //display device name and address when device found
     private final BroadcastReceiver bReciever = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
+
             String action = intent.getAction();
             if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
-                //discovery starts, we can show progress dialog or perform other tasks
-                Toast.makeText(BluetoothActivity.this,"dicovery started",Toast.LENGTH_SHORT).show();
-            } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
-                //discovery finishes, dismis progress dialog
-                Toast.makeText(BluetoothActivity.this,"dicovery finished",Toast.LENGTH_SHORT).show();
-            }else if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                findViewById(R.id.loading_progress).setVisibility(View.VISIBLE);
+            }
+            else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+                findViewById(R.id.loading_progress).setVisibility(View.GONE);
+            }
+            else if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 // Create a new device item
-                list.add("name:"+device.getName()+"\naddress:"+device.getAddress());
+                list.add("Device Name: "+device.getName()+"\nMAC Address: "+device.getAddress());
                 // Add it to our adapter
                 adapter.notifyDataSetChanged();
-                Toast.makeText(BluetoothActivity.this,"name:"+device.getName()+"\naddress:"+device.getAddress(),Toast.LENGTH_SHORT).show();
             }
         }
     };
