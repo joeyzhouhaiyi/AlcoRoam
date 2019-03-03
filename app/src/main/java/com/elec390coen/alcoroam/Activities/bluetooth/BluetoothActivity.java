@@ -78,7 +78,8 @@ public class BluetoothActivity extends AppCompatActivity {
         }else
         {
             name_bt.setText(getBTName());
-            tv_address.setText("Your device address: "+BTAdapter.getAddress());
+            String macAddress = android.provider.Settings.Secure.getString(getContentResolver(), "bluetooth_address");
+            tv_address.setText("Your device address: "+macAddress);
             if(BTAdapter.isEnabled()){
                 enable_bt.setChecked(true);
             }
