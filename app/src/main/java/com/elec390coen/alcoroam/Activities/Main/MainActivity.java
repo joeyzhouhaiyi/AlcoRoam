@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, SettingActivity.class));
             }
         });
+<<<<<<< HEAD
 
 
         //alcohol
@@ -57,11 +58,18 @@ public class MainActivity extends AppCompatActivity {
 
         //bluetooth
         btn_bluetooth = findViewById(R.id.btn_bt);
+=======
+        btn_bluetooth = findViewById(R.id.btn_bluetooth);
+>>>>>>> e9f02fe722d67a2912d29362235614f110acc65f
         btn_bluetooth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, BluetoothActivity.class));
             }
         });
+<<<<<<< HEAD
+=======
+
+>>>>>>> e9f02fe722d67a2912d29362235614f110acc65f
     }
 }
