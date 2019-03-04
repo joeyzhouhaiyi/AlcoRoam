@@ -28,10 +28,8 @@ import java.util.Set;
 
 public class BluetoothActivity extends AppCompatActivity {
     private BluetoothAdapter BTAdapter;
-    public static String EXTRA_ADDRESS = "device_address";
     CheckBox enable_bt;
     TextView name_bt;
-    TextView tv_address;
     ListView listview;
     ArrayList list;
     Button btn_search;
@@ -45,10 +43,9 @@ public class BluetoothActivity extends AppCompatActivity {
 
         enable_bt = findViewById(R.id.enable_bt);
         name_bt = findViewById(R.id.name_bt);
-        tv_address = findViewById(R.id.device_address);
         listview = findViewById(R.id.list_view);
         list = new ArrayList();
-        btn_search = findViewById(R.id.btn_cancel);
+        btn_search = findViewById(R.id.btn_search);
         adapter = new ArrayAdapter(BluetoothActivity.this, android.R.layout.simple_list_item_1, list);
         listview.setAdapter(adapter);
         listview.setOnItemClickListener(myListClickListener);
@@ -78,7 +75,6 @@ public class BluetoothActivity extends AppCompatActivity {
         }else
         {
             name_bt.setText(getBTName());
-            tv_address.setText("Your device address: "+BTAdapter.getAddress());
             if(BTAdapter.isEnabled()){
                 enable_bt.setChecked(true);
             }

@@ -47,16 +47,6 @@
             android:textSize="20sp"/>
     </LinearLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="5dp"
-        android:id="@+id/device_address"
-        android:text="00:00:00:00:00:00"
-        android:layout_below="@+id/ll_enable"
-        />
-
 
 
     <TextView
@@ -64,7 +54,6 @@
         android:text="@string/tap_to_connect"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/device_address"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginBottom="5dp"
