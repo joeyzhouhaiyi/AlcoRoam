@@ -56,6 +56,8 @@ public class BluetoothActivity extends AppCompatActivity {
                 if(btn_search.getText().toString().equals(getString(R.string.search)))
                 {
                     btn_search.setText(R.string.stop);
+                    list.clear();
+                    adapter.notifyDataSetChanged();
                     searchForDevice();
 
                 }else {
@@ -137,7 +139,9 @@ public class BluetoothActivity extends AppCompatActivity {
             // Get the device MAC address, the last 17 chars in the View
             String info = ((TextView) v).getText().toString();
             String address = info.substring(info.length() - 17);
-
+            unregisterReceiver(bReciever);
+            BTAdapter.cancelDiscovery();
+            btn_search.setText(R.string.search);
             new ConnectBT(BluetoothActivity.this,address).execute();
         }
     };
