@@ -52,6 +52,7 @@
     <TextView
         android:id="@+id/tap_to_connect"
         android:text="@string/tap_to_connect"
+        android:layout_below="@+id/ll_enable"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"

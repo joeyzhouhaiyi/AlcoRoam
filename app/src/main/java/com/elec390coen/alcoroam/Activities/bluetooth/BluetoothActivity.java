@@ -55,15 +55,22 @@ public class BluetoothActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(btn_search.getText().toString().equals(getString(R.string.search)))
                 {
-                    btn_search.setText(R.string.stop);
+
+                    //setup intent filter and register receiver
+                    IntentFilter filter = new IntentFilter();
+                    filter.addAction(BluetoothDevice.ACTION_FOUND);
+                    filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
+                    filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+                    registerReceiver(bReciever, filter);
+                    //btn_search.setText(R.string.stop);
                     list.clear();
                     adapter.notifyDataSetChanged();
                     searchForDevice();
 
                 }else {
-                    unregisterReceiver(bReciever);
+                    //unregisterReceiver(bReciever);
                     BTAdapter.cancelDiscovery();
-                    btn_search.setText(R.string.search);
+                    //btn_search.setText(R.string.search);
                 }
             }
         });
@@ -139,7 +146,8 @@ public class BluetoothActivity extends AppCompatActivity {
             // Get the device MAC address, the last 17 chars in the View
             String info = ((TextView) v).getText().toString();
             String address = info.substring(info.length() - 17);
-            unregisterReceiver(bReciever);
+
+            //unregisterReceiver(bReciever);
             BTAdapter.cancelDiscovery();
             btn_search.setText(R.string.search);
             new ConnectBT(BluetoothActivity.this,address).execute();
@@ -153,9 +161,11 @@ public class BluetoothActivity extends AppCompatActivity {
             String action = intent.getAction();
             if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
                 findViewById(R.id.loading_progress).setVisibility(View.VISIBLE);
+                btn_search.setText(getString(R.string.stop));
             }
             else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
                 findViewById(R.id.loading_progress).setVisibility(View.GONE);
+                btn_search.setText(getString(R.string.search));
             }
             else if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
