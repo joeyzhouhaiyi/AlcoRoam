@@ -6,4 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".Activities.Alcohol.AlcoholActivity">
 
+    <TextView
+        android:id="@+id/textview"
+        android:layout_width="170dp"
+        android:layout_height="108dp"
+        android:text="TextView"
+        tools:layout_editor_absoluteX="129dp"
+        tools:layout_editor_absoluteY="255dp" />
 </android.support.constraint.ConstraintLayout>
