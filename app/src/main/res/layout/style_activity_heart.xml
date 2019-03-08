@@ -39,6 +39,19 @@
                 android:text="Get Heart Rate"
                 android:id="@+id/heartRateBtn"
                 android:layout_gravity="center_horizontal" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Large Text"
+                android:id="@+id/hrValueView"
+                android:layout_gravity="center_horizontal" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Normal Range: 70-90"
+                android:layout_gravity="center_horizontal"
+                />
 
 
             <TextView
