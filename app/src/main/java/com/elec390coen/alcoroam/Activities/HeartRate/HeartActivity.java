@@ -25,7 +25,7 @@ public class HeartActivity<GraphView, LineGraphView> extends AppCompatActivity {
         connectionStsView = (TextView) findViewById(R.id.connectionStsView);
         refreshButton = (Button) findViewById(R.id.refreshBtn);
 
-        final GraphView graphView = new LineGraphView(
+        /*final GraphView graphView = new LineGraphView(
                 this, // context
                 "Heart Rate Sensor" // heading
         );
@@ -48,4 +48,4 @@ public class HeartActivity<GraphView, LineGraphView> extends AppCompatActivity {
                 }
             }
         });
-    }
+    }*/
