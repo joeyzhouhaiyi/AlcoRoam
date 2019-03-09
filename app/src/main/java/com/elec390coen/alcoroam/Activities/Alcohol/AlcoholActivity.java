@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +26,7 @@ import java.util.UUID;
 public class AlcoholActivity extends AppCompatActivity {
     TextView viewData;
     Handler btin;
+    ProgressBar pb_alcohol_level;
 
     final int handlerState = 0;
     private BluetoothAdapter btAdapter = null;
@@ -38,7 +40,7 @@ public class AlcoholActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.style_activity_alcohol);
-        viewData = (TextView) findViewById(R.id.tv_response);
+        initUI();
         btin = new Handler(){
             public void handleMessage(android.os.Message msg){
                 if(msg.what == handlerState){
@@ -172,7 +174,8 @@ public class AlcoholActivity extends AppCompatActivity {
 
     private void initUI()
     {
-
+        viewData = findViewById(R.id.tv_response);
+        pb_alcohol_level = findViewById(R.id.pb_alcohol_level);
     }
 }
 
