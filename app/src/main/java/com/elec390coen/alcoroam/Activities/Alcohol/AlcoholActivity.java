@@ -136,5 +136,10 @@ public class AlcoholActivity extends AppCompatActivity {
             }
         }
     }
+
+    private void initUI()
+    {
+
+    }
 }
 
