@@ -5,8 +5,13 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.widget.Toast;
+
+import com.elec390coen.alcoroam.Activities.Alcohol.AlcoholActivity;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -46,6 +51,14 @@ public class ConnectBT extends AsyncTask<Void, Void, Void>  // UI thread
                 btSocket = dispositivo.createInsecureRfcommSocketToServiceRecord(myUUID);//create a RFCOMM (SPP) connection
                 BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
                 btSocket.connect();//start connection
+                /*
+                SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+                SharedPreferences.Editor editor = pref.edit();
+
+                editor.putString("current_bluetooth_address",address);
+                editor.apply();*/
+
+
             }
         }
         catch (IOException e)
@@ -67,6 +80,14 @@ public class ConnectBT extends AsyncTask<Void, Void, Void>  // UI thread
         {
             msg("Connected.");
             isBtConnected = true;
+            /*
+            Intent i = new Intent(context, AlcoholActivity.class);
+            i.putExtra("bt_address", address);
+            //context.startActivity(i);*/
+            SharedPreferences p = context.getSharedPreferences("alc", Context.MODE_PRIVATE);
+            SharedPreferences.Editor e = p.edit();
+            e.putString("current_bluetooth_address",address);
+            e.apply();
         }
         progress.dismiss();
     }
