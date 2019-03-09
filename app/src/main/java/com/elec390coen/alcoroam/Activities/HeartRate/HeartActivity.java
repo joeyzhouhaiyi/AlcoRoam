@@ -9,7 +9,7 @@ import android.widget.TextView;
 import com.elec390coen.alcoroam.R;
 
 public class HeartActivity<GraphView, LineGraphView> extends AppCompatActivity {
-    private int x=0;
+    private int x = 0;
     private Button getHeartRate;
     private Button refreshButton;
     private TextView hrRateView;
@@ -47,5 +47,6 @@ public class HeartActivity<GraphView, LineGraphView> extends AppCompatActivity {
                     }
                 }
             }
-        });
-    }*/
+        });*/
+    }
+}

@@ -3,8 +3,11 @@ package com.elec390coen.alcoroam.Activities.Alcohol;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -30,21 +33,38 @@ public class AlcoholActivity extends AppCompatActivity {
     private ConnectedThread mConnectedThread;
 
     private static final UUID BTUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-    private static String address;
+    private String address;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        viewData = (TextView) findViewById(R.id.textview);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.style_activity_alcohol);
+        viewData = (TextView) findViewById(R.id.tv_response);
         btin = new Handler(){
             public void handleMessage(android.os.Message msg){
                 if(msg.what == handlerState){
                     String readMessage = (String)msg.obj;
                     recDataString.append(readMessage);
-                    String sensor0 = recDataString.substring(1,5);
-                    viewData.setText(sensor0);
+                    //String sensor0 = recDataString.substring(1,5);
+                    int endOfLineIndex = recDataString.indexOf("~");                    // determine the end-of-line
+                    if (endOfLineIndex > 0) {                                           // make sure there data before ~
+                        String dataInPrint = recDataString.substring(0, endOfLineIndex);    // extract string
+                        int dataLength = dataInPrint.length();                          //get length of data received
+                        if (recDataString.charAt(0) == '#')                             //if it starts with # we know it is what we are looking for
+                        {
+
+                            String sensor0 = recDataString.substring(1, dataLength);
+                            viewData.setText("Data length = "+dataLength+". Sensor reading = " + sensor0 + "ml/g");    //update the textviews with sensor values
+
+                        }
+                        recDataString.delete(0, recDataString.length());                    //clear all string data
+                        // strIncom =" ";
+                        dataInPrint = " ";
+                        /*
+                    if(viewData!=null)
+                    viewData.setText("bt reading: "+recDataString);
                     recDataString.delete(0,recDataString.length());
-                }
+*/}
+                    }
             }
         };
         btAdapter = BluetoothAdapter.getDefaultAdapter();       // get Bluetooth adapter
@@ -60,8 +80,11 @@ public class AlcoholActivity extends AppCompatActivity {
 
         //get MAC address
         Intent intent = getIntent();
-        BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-        address = device.getAddress();
+        //BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+
+        address = getAddressFromSharedPref();//intent.getStringExtra("bt_address");//
+        viewData.setText(address);
+        BluetoothDevice device = btAdapter.getRemoteDevice(address);
         try {
             btSocket = createBluetoothSocket(device);
         } catch (IOException e) {
@@ -70,12 +93,16 @@ public class AlcoholActivity extends AppCompatActivity {
         // Establish the Bluetooth socket connection.
         try
         {
+            btSocket =(BluetoothSocket) device.getClass().getMethod("createRfcommSocket", new Class[] {int.class}).invoke(device,1);
             btSocket.connect();
-        } catch (IOException e) {
+        } catch (Exception e) {
+            Toast.makeText(this,e.getMessage(),Toast.LENGTH_SHORT).show();
             try
             {
-                btSocket.close();
-            } catch (IOException e2)
+                btSocket =(BluetoothSocket) device.getClass().getMethod("createRfcommSocket", new Class[] {int.class}).invoke(device,1);
+                btSocket.connect();
+                //btSocket.close();
+            } catch (Exception e2)
             {
                 //insert code to deal with this
             }
@@ -85,7 +112,7 @@ public class AlcoholActivity extends AppCompatActivity {
 
         //I send a character when resuming.beginning transmission to check device is connected
         //If it is not an exception will be thrown in the write method and finish() will be called
-        mConnectedThread.write("x");
+        //mConnectedThread.write("x");
     }
     public class ConnectedThread extends Thread {
         private final InputStream mmInStream;
@@ -123,6 +150,7 @@ public class AlcoholActivity extends AppCompatActivity {
                 }
             }
         }
+        /*
         //write method
         public void write(String input) {
             byte[] msgBuffer = input.getBytes();           //converts entered String into bytes
@@ -134,7 +162,12 @@ public class AlcoholActivity extends AppCompatActivity {
                 finish();
 
             }
-        }
+        }*/
+    }
+    public String getAddressFromSharedPref()
+    {
+        SharedPreferences p = this.getSharedPreferences("alc", MODE_PRIVATE);
+        return p.getString("current_bluetooth_address","null");
     }
 
     private void initUI()
