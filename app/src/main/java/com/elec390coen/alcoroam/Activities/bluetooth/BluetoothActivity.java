@@ -21,81 +21,51 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.elec390coen.alcoroam.Controllers.BluetoothHelper;
 import com.elec390coen.alcoroam.R;
 
 import java.util.ArrayList;
 import java.util.Set;
 
 public class BluetoothActivity extends AppCompatActivity {
-    private BluetoothAdapter BTAdapter;
+
     CheckBox enable_bt;
     TextView name_bt;
     ListView listview;
-    ArrayList list;
+    ArrayList<BluetoothDevice> deviceList;
     Button btn_search;
     ArrayAdapter adapter;
-
+    BluetoothHelper bluetoothHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.style_activity_bluetooth);
 
-        enable_bt = findViewById(R.id.enable_bt);
-        name_bt = findViewById(R.id.name_bt);
-        listview = findViewById(R.id.list_view);
-        list = new ArrayList();
-        btn_search = findViewById(R.id.btn_search);
-        adapter = new ArrayAdapter(BluetoothActivity.this, android.R.layout.simple_list_item_1, list);
-        listview.setAdapter(adapter);
-        listview.setOnItemClickListener(myListClickListener);
-
+        //initialize helper, close the screen if bluetooth is not supported
+        bluetoothHelper = new BluetoothHelper(BluetoothActivity.this);
+        initView();
+        //search button listener
         btn_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(btn_search.getText().toString().equals(getString(R.string.search)))
                 {
-
-                    //setup intent filter and register receiver
-                    IntentFilter filter = new IntentFilter();
-                    filter.addAction(BluetoothDevice.ACTION_FOUND);
-                    filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
-                    filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-                    registerReceiver(bReciever, filter);
-                    //btn_search.setText(R.string.stop);
-                    list.clear();
+                    bluetoothHelper.registerReceiverWithFilter(bReciever); //register receiver
+                    deviceList.clear(); //clear the list before a new discovery
                     adapter.notifyDataSetChanged();
                     searchForDevice();
-
                 }else {
-                    //unregisterReceiver(bReciever);
-                    BTAdapter.cancelDiscovery();
-                    //btn_search.setText(R.string.search);
+                    bluetoothHelper.stopSearchingForDevice();
                 }
             }
         });
-
-
-        BTAdapter = BluetoothAdapter.getDefaultAdapter();
-        //Check the bluetooth is available
-        if (BTAdapter == null){
-            Toast.makeText(this,"Bluetooth is not supported", Toast.LENGTH_SHORT).show();
-            finish();
-        }else
-        {
-            name_bt.setText(getBTName());
-            if(BTAdapter.isEnabled()){
-                enable_bt.setChecked(true);
-            }
-        }
-
         //implement enable checkbox
         enable_bt.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(!isChecked){
-                    BTAdapter.disable();
-                    Toast.makeText(BluetoothActivity.this,"Turn off bluetooth", Toast.LENGTH_SHORT).show();
+                    bluetoothHelper.turnOffBluetooth();
                 }
                 else{
                     Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -106,53 +76,43 @@ public class BluetoothActivity extends AppCompatActivity {
         });
     }
 
+    private void initView()
+    {
+        enable_bt = findViewById(R.id.enable_bt);
+        name_bt = findViewById(R.id.name_bt);
+        listview = findViewById(R.id.list_view);
+        deviceList = new ArrayList<>();
+        btn_search = findViewById(R.id.btn_search);
+        adapter = new ArrayAdapterForBluetoothDevices(BluetoothActivity.this,deviceList);
+        listview.setAdapter(adapter);
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                BluetoothDevice selectedDevice = (BluetoothDevice)parent.getItemAtPosition(position);
+                bluetoothHelper.stopSearchingForDevice();
+                new ConnectBT(BluetoothActivity.this,selectedDevice).execute();
+            }
+        });
+        //set current device name and initialize checkbox
+        name_bt.setText(bluetoothHelper.getCurrentBluetoothDeviceName());
+        if(bluetoothHelper.bluetoothIsAvailable()){
+            enable_bt.setChecked(true);
+        }
+    }
+
     //search for device and show the device name and address
     private void searchForDevice(){
-
-        //setup intent filter and register receiver
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(BluetoothDevice.ACTION_FOUND);
-        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
-        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-        registerReceiver(bReciever, filter);
-
+        bluetoothHelper.registerReceiverWithFilter(bReciever);
         //request location permission
         int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_AND_FINE_LOCATION = 1;
         ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION},
                 MY_PERMISSIONS_REQUEST_ACCESS_COARSE_AND_FINE_LOCATION);
 
-        BTAdapter.startDiscovery();
-        Toast.makeText(this,"Searching for Devices", Toast.LENGTH_SHORT).show();
-
+        bluetoothHelper.startSearchingForDevice();
     }
 
-    //get current device name, if name is null get its address
-    public String getBTName(){
-        if (BTAdapter == null){
-            BTAdapter = BluetoothAdapter.getDefaultAdapter();
-        }
-        String name = BTAdapter.getName();
-        if (name == null){
-            name = BTAdapter.getAddress();
-        }
-        return name;
-    }
-
-    private AdapterView.OnItemClickListener myListClickListener = new AdapterView.OnItemClickListener()
-    {
-        public void onItemClick (AdapterView<?> av, View v, int arg2, long arg3)
-        {
-            // Get the device MAC address, the last 17 chars in the View
-            String info = ((TextView) v).getText().toString();
-            String address = info.substring(info.length() - 17);
-
-            //unregisterReceiver(bReciever);
-            BTAdapter.cancelDiscovery();
-            btn_search.setText(R.string.search);
-            new ConnectBT(BluetoothActivity.this,address).execute();
-        }
-    };
 
     //display device name and address when device found
     private final BroadcastReceiver bReciever = new BroadcastReceiver() {
@@ -169,9 +129,7 @@ public class BluetoothActivity extends AppCompatActivity {
             }
             else if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                // Create a new device item
-                list.add("Device Name: "+device.getName()+"\nMAC Address: "+device.getAddress());
-                // Add it to our adapter
+                deviceList.add(device);
                 adapter.notifyDataSetChanged();
             }
         }

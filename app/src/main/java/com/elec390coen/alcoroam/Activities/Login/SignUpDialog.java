@@ -55,6 +55,7 @@ public class SignUpDialog extends Dialog {
                     tv_error.setText("*field cannot be empty");
                 }else
                 {
+                    findViewById(R.id.dialog_loading).setVisibility(View.VISIBLE);
                     if(password.equals(et_dialog_password_re.getText().toString()))
                     {
                         fireBaseHelper.getAuth().createUserWithEmailAndPassword(email,password)
@@ -78,7 +79,6 @@ public class SignUpDialog extends Dialog {
                         tv_error.setText("Password does not match");
                     }
                 }
-                findViewById(R.id.dialog_loading).setVisibility(View.VISIBLE);
             }
         });
     }

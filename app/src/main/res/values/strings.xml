@@ -14,4 +14,8 @@
     <string name="search">SEARCH</string>
     <string name="stop">STOP</string>
     <string name="save">Save</string>
+    <string name="mount_device">Mount your device as:</string>
+    <string name="mount_notice">*Note that if you mount your device to incorrect slot, the device will not functioning properly</string>
+    <string name="alcohol">Alcohol</string>
+    <string name="heart">Heart Rate</string>
 </resources>

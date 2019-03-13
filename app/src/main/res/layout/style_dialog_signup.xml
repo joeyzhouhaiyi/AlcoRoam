@@ -109,20 +109,20 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"/>
 
-                <Button
-                    android:id="@+id/btn_dialog_signup"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginBottom="20dp"
-                    android:background="@color/btn_green"
-                    android:text="@string/sign_up"
-                    android:textAllCaps="false"
-                    android:textColor="@color/app_white" />
-
 
             </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_dialog_signup"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="20dp"
+                android:background="@color/btn_green"
+                android:text="@string/sign_up"
+                android:textAllCaps="false"
+                android:textColor="@color/app_white" />
 
         </LinearLayout>
 

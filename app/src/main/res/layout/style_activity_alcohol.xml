@@ -7,6 +7,18 @@
     tools:context=".Activities.Alcohol.AlcoholActivity">
 
     <TextView
+        android:id="@+id/tv_connection_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="connection status:"
+        android:textSize="30sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="30dp"
+        android:gravity="center"
+        android:textColor="@color/app_black"/>
+    <TextView
         android:id="@+id/tv_response"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,6 +37,7 @@
         android:layout_marginTop="40dp"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
+        style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_response" />

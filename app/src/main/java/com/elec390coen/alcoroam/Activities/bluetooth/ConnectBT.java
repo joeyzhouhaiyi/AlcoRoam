@@ -20,7 +20,7 @@ public class ConnectBT extends AsyncTask<Void, Void, Void>  // UI thread
 {
     private boolean ConnectSuccess = true; //if it's here, it's almost connected
     Context context;
-    String address = null;
+    BluetoothDevice selectedDevice;
     private ProgressDialog progress;
     BluetoothAdapter myBluetooth = null;
     BluetoothSocket btSocket = null;
@@ -28,9 +28,9 @@ public class ConnectBT extends AsyncTask<Void, Void, Void>  // UI thread
     //SPP UUID. Look for it
     static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
-    ConnectBT(Context context, String address){
+    ConnectBT(Context context, BluetoothDevice selectedDevice){
         this.context = context;
-        this.address = address;
+        this.selectedDevice = selectedDevice;
     }
 
     @Override
@@ -47,17 +47,10 @@ public class ConnectBT extends AsyncTask<Void, Void, Void>  // UI thread
             if (btSocket == null || !isBtConnected)
             {
                 myBluetooth = BluetoothAdapter.getDefaultAdapter();//get the mobile bluetooth device
-                BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(address);//connects to the device's address and checks if it's available
+                BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(selectedDevice.getAddress());//connects to the device's address and checks if it's available
                 btSocket = dispositivo.createInsecureRfcommSocketToServiceRecord(myUUID);//create a RFCOMM (SPP) connection
                 BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
                 btSocket.connect();//start connection
-                /*
-                SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-                SharedPreferences.Editor editor = pref.edit();
-
-                editor.putString("current_bluetooth_address",address);
-                editor.apply();*/
-
 
             }
         }
@@ -80,14 +73,11 @@ public class ConnectBT extends AsyncTask<Void, Void, Void>  // UI thread
         {
             msg("Connected.");
             isBtConnected = true;
-            /*
-            Intent i = new Intent(context, AlcoholActivity.class);
-            i.putExtra("bt_address", address);
-            //context.startActivity(i);*/
             SharedPreferences p = context.getSharedPreferences("alc", Context.MODE_PRIVATE);
             SharedPreferences.Editor e = p.edit();
-            e.putString("current_bluetooth_address",address);
+            e.putString("current_bluetooth_address",selectedDevice.getAddress());
             e.apply();
+            new ChooseDeviceDialog(context,selectedDevice).show();
         }
         progress.dismiss();
     }

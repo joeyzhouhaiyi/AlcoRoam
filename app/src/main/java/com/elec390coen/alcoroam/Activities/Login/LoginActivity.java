@@ -41,6 +41,7 @@ public class LoginActivity extends AppCompatActivity {
                     tv_error.setText("*field cannot be empty");
                 }else
                 {
+                    findViewById(R.id.loading).setVisibility(View.VISIBLE);
                     fireBaseHelper.getAuth().signInWithEmailAndPassword(email,pass)
                             .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                                 @Override
@@ -58,7 +59,6 @@ public class LoginActivity extends AppCompatActivity {
                                 }
                             });
                 }
-                findViewById(R.id.loading).setVisibility(View.VISIBLE);
             }
         });
         btn_signup.setOnClickListener(new View.OnClickListener() {
