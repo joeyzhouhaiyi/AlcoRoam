@@ -11,7 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.elec390coen.alcoroam.Activities.Main.MainActivity;
-import com.elec390coen.alcoroam.Controllers.FireBaseHelper;
+import com.elec390coen.alcoroam.Controllers.FireBaseAuthHelper;
 import com.elec390coen.alcoroam.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -24,7 +24,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button btn_login;
     private Button btn_signup;
     private TextView tv_error;
-    private FireBaseHelper fireBaseHelper;
+    private FireBaseAuthHelper fireBaseAuthHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,14 +42,14 @@ public class LoginActivity extends AppCompatActivity {
                 }else
                 {
                     findViewById(R.id.loading).setVisibility(View.VISIBLE);
-                    fireBaseHelper.getAuth().signInWithEmailAndPassword(email,pass)
+                    fireBaseAuthHelper.getAuth().signInWithEmailAndPassword(email,pass)
                             .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     findViewById(R.id.loading).setVisibility(View.GONE);
                                     if(task.isSuccessful())
                                     {
-                                        fireBaseHelper.setCurrentUser(fireBaseHelper.getAuth().getCurrentUser());
+                                        fireBaseAuthHelper.setCurrentUser(fireBaseAuthHelper.getAuth().getCurrentUser());
                                         startActivity(new Intent(LoginActivity.this,MainActivity.class));
                                         finish();
                                     }else
@@ -71,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void initView()
     {
-        fireBaseHelper = new FireBaseHelper();
+        fireBaseAuthHelper = new FireBaseAuthHelper();
         et_email = findViewById(R.id.et_email);
         et_pass = findViewById(R.id.et_password);
         btn_login = findViewById(R.id.btn_signin);

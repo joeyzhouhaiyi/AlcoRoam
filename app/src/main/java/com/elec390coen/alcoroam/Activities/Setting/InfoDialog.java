@@ -11,8 +11,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import com.elec390coen.alcoroam.Controllers.FireBaseHelper;
 import com.elec390coen.alcoroam.R;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -22,8 +20,6 @@ public class InfoDialog extends Dialog {
     EditText email;
     EditText name;
     Button btn_save;
-
-    FireBaseHelper fireBaseHelper;
 
     Context context;
   //  InfoDIalogListener listener;

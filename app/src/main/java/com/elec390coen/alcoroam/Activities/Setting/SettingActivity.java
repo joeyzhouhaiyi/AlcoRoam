@@ -10,7 +10,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.elec390coen.alcoroam.Controllers.FireBaseHelper;
 import com.elec390coen.alcoroam.R;
 
 public class SettingActivity extends AppCompatActivity {

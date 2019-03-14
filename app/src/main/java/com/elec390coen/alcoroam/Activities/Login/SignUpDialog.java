@@ -13,7 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.elec390coen.alcoroam.Activities.Main.MainActivity;
-import com.elec390coen.alcoroam.Controllers.FireBaseHelper;
+import com.elec390coen.alcoroam.Controllers.FireBaseAuthHelper;
+import com.elec390coen.alcoroam.Controllers.FireBaseDBHelper;
 import com.elec390coen.alcoroam.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -27,7 +28,8 @@ public class SignUpDialog extends Dialog {
     private EditText et_dialog_password;
     private EditText et_dialog_password_re;
     private Button btn_dialog_signup;
-    private FireBaseHelper fireBaseHelper;
+    private FireBaseAuthHelper fireBaseAuthHelper;
+    private FireBaseDBHelper fireBaseDBHelper;
     private TextView tv_error;
 
     public SignUpDialog(Context context)
@@ -48,8 +50,8 @@ public class SignUpDialog extends Dialog {
         btn_dialog_signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = et_dialog_email.getText().toString();
-                String password = et_dialog_password.getText().toString();
+                final String email = et_dialog_email.getText().toString();
+                final String password = et_dialog_password.getText().toString();
                 if(email.isEmpty() || password.isEmpty())
                 {
                     tv_error.setText("*field cannot be empty");
@@ -58,14 +60,15 @@ public class SignUpDialog extends Dialog {
                     findViewById(R.id.dialog_loading).setVisibility(View.VISIBLE);
                     if(password.equals(et_dialog_password_re.getText().toString()))
                     {
-                        fireBaseHelper.getAuth().createUserWithEmailAndPassword(email,password)
+                        fireBaseAuthHelper.getAuth().createUserWithEmailAndPassword(email,password)
                                 .addOnCompleteListener(getOwnerActivity(), new OnCompleteListener<AuthResult>() {
                                     @Override
                                     public void onComplete(@NonNull Task<AuthResult> task) {
                                         findViewById(R.id.dialog_loading);
                                         if(task.isSuccessful())
                                         {
-                                            fireBaseHelper.setCurrentUser(fireBaseHelper.getAuth().getCurrentUser());
+                                            fireBaseAuthHelper.setCurrentUser(fireBaseAuthHelper.getAuth().getCurrentUser());
+                                            fireBaseDBHelper.addNewUser("Joey",email,password);
                                             dismiss();
                                             getContext().startActivity(new Intent(getOwnerActivity(),MainActivity.class));
                                         }else
@@ -91,6 +94,7 @@ public class SignUpDialog extends Dialog {
         btn_dialog_signup = findViewById(R.id.btn_dialog_signup);
         tv_error = findViewById(R.id.tv_signup_error);
         tv_error.setText("");
-        fireBaseHelper = new FireBaseHelper();
+        fireBaseAuthHelper = new FireBaseAuthHelper();
+        fireBaseDBHelper = new FireBaseDBHelper();
     }
 }

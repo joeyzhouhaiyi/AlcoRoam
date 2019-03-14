@@ -4,11 +4,11 @@ package com.elec390coen.alcoroam.Controllers;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class FireBaseHelper {
+public class FireBaseAuthHelper {
 
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
-    public FireBaseHelper()
+    public FireBaseAuthHelper()
     {
         mAuth = FirebaseAuth.getInstance();
     }
