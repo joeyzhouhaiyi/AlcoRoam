@@ -115,7 +115,7 @@
             <Button
                 android:id="@+id/btn_dialog_signup"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="36dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="20dp"

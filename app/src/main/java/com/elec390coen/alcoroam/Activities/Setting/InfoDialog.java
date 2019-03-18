@@ -7,19 +7,32 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.elec390coen.alcoroam.Controllers.FireBaseAuthHelper;
+import com.elec390coen.alcoroam.Controllers.FireBaseDBHelper;
+import com.elec390coen.alcoroam.Models.User;
 import com.elec390coen.alcoroam.R;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import static android.content.Context.MODE_PRIVATE;
 
 public class InfoDialog extends Dialog {
-    EditText phoneNumber;
-    EditText email;
-    EditText name;
+    EditText et_phoneNumber;
+    EditText et_email;
+    EditText et_name;
     Button btn_save;
+
+    FirebaseUser currentUser;
+    FireBaseAuthHelper authHelper;
+    FireBaseDBHelper dbHelper;
 
     Context context;
   //  InfoDIalogListener listener;
@@ -35,8 +48,9 @@ public class InfoDialog extends Dialog {
         setContentView(R.layout.style_dialog_settings_contact_info);
         setCanceledOnTouchOutside(true);
         initView();
+        getCurrentUserInfo();
         //retrieve the data from SharedPreferences
-
+/*
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
         String phoneString = pref.getString("phone", "");
         phoneNumber.setText(phoneString);
@@ -46,18 +60,25 @@ public class InfoDialog extends Dialog {
 
         String nameString = pref.getString("name", "");
         name.setText(nameString);
-
+*/
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String phoneEntered = phoneNumber.getText().toString();
-                String emailEntered = email.getText().toString();
-                String nameEntered = name.getText().toString();
-                if(phoneEntered.isEmpty() || emailEntered.isEmpty() || nameEntered.isEmpty())
+                String nameEntered = et_name.getText().toString();
+                String emailEntered = et_email.getText().toString();
+                String phoneEntered = et_phoneNumber.getText().toString();
+                if(nameEntered.isEmpty())
                 {
-                    Toast.makeText(context,"Cannot have empty field.",Toast.LENGTH_LONG).show();
+                    et_name.setError("Field Required");
+                }
+                else if(emailEntered.isEmpty()){
+                    et_email.setError("Field Required");
+                }
+                else if(phoneEntered.isEmpty()){
+                    et_phoneNumber.setError("Field Required");
                 }
                 else{
+                    /*
                     SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
                     SharedPreferences.Editor editor = pref.edit();
 
@@ -66,78 +87,70 @@ public class InfoDialog extends Dialog {
                     editor.putString("name", nameEntered);
                     editor.apply();
                     Toast.makeText(context,"Saved",Toast.LENGTH_LONG).show();
+                    */
+                    String id = currentUser.getUid();
+                    dbHelper.getUserRefWithId(id).child("emergencyContactName").setValue(nameEntered);
+                    dbHelper.getUserRefWithId(id).child("emergencyContactEmail").setValue(emailEntered);
+                    dbHelper.getUserRefWithId(id).child("emergencyContactNumber").setValue(phoneEntered);
                     dismiss();
 
                 }
 
             }
         });
-/*
-        builder.setView(view)
-                .setTitle("Emergency Contact")
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
 
-                    }
-                })
-                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        listener.applyTexts(phoneTxt, nameTxt, emailTxt);
-
-                        SharedPreferences pref = context.getSharedPreferences("contact_info",MODE_PRIVATE);
-                        SharedPreferences.Editor editor = pref.edit();
-
-                    editor.putString("phone", phoneTxt);
-                    editor.putString("email", emailTxt);
-                    editor.putString("name", nameTxt);
-                    editor.apply();
-
-
-                    }
-                });
-
-*/
-
-
- //       return builder.create();
     }
 
+    private void getCurrentUserInfo()
+    {
+        String id = currentUser.getUid();
+
+        dbHelper.getUserRefWithId(id).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User thisUser = dataSnapshot.getValue(User.class);
+                if(thisUser!=null)
+                {
+                    String contactName = thisUser.getEmergencyContactName();
+                    String contactEmail = thisUser.getEmergencyContactEmail();
+                    String contactPhone = thisUser.getEmergencyContactNumber();
+                    et_name.setText(contactName);
+                    et_email.setText(contactEmail);
+                    et_phoneNumber.setText(contactPhone);
+                }
+                /*
+                for(DataSnapshot user : dataSnapshot.getChildren()){
+
+                    User thisUser = user.getValue(User.class);
+                    //add each contact to an arraylist and use it to populate a list of contacts
+                    if(thisUser!=null)
+                    {
+                        String contactName = thisUser.getEmergencyContactName();
+                        String contactEmail = thisUser.getEmergencyContactEmail();
+                        String contactPhone = thisUser.getEmergencyContactNumber();
+                        et_name.setText(contactName);
+                        et_email.setText(contactEmail);
+                        et_phoneNumber.setText(contactPhone);
+                    }
+                }*/
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(context, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
     private void initView()
     {
-        phoneNumber = findViewById(R.id.contactPhone);
-        email = findViewById(R.id.contactEmail);
-        name = findViewById(R.id.contactName);
+        et_phoneNumber = findViewById(R.id.contactPhone);
+        et_email = findViewById(R.id.contactEmail);
+        et_name = findViewById(R.id.contactName);
         btn_save = findViewById(R.id.btn_save);
-    }
-/*
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            listener = (InfoDIalogListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString()+ "must implement info");
-        }
+        dbHelper = new FireBaseDBHelper();
+        authHelper = new FireBaseAuthHelper();
+        currentUser = authHelper.getCurrentUser();
     }
 
-    public interface InfoDIalogListener{
-        void applyTexts (String phoneTxt, String nameTxt, String emailTxt);
-
-    }
-*/
-//    public String getName(){
-//        return nameTxt;
-//    }
-//
-//
-//    public String getNumber(){
-//        return phoneTxt;
-//    }
-//
-//    public String getEmail(){
-//        return emailTxt;
-//    }
 }

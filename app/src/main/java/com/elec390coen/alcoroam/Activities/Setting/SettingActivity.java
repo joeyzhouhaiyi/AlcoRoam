@@ -2,6 +2,7 @@ package com.elec390coen.alcoroam.Activities.Setting;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,7 +11,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.elec390coen.alcoroam.Controllers.FireBaseAuthHelper;
+import com.elec390coen.alcoroam.Controllers.FireBaseDBHelper;
+import com.elec390coen.alcoroam.Models.User;
 import com.elec390coen.alcoroam.R;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 public class SettingActivity extends AppCompatActivity {
 
@@ -22,13 +30,17 @@ public class SettingActivity extends AppCompatActivity {
 
     Button contactInfoBTN;
 
+    FirebaseUser currentUser;
+    FireBaseAuthHelper authHelper;
+    FireBaseDBHelper dbHelper;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.style_activity_setting);
-
+        initView();
+        getCurrentUserInfo();
 //        //initialize views
 //        phoneNumber = findViewById(R.id.contactPhone);
 //        email = findViewById(R.id.contactEmail);
@@ -82,17 +94,17 @@ public class SettingActivity extends AppCompatActivity {
 //
 //}
 
-        textViewEmail = findViewById(R.id.txtVEmail);
-        textViewName = findViewById(R.id.txtVName);
-        textViewPhone = findViewById(R.id.txtVPhone);
-        contactInfoBTN = findViewById(R.id.contactInfo_btn);
+
+
+
+        /*
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(SettingActivity.this);
 
         textViewPhone.setText("Phone Number: "+sharedPreferences.getString("phone",""));
         textViewEmail.setText("Email: "+sharedPreferences.getString("email",""));
         textViewName.setText("Name: "+sharedPreferences.getString("name",""));
 
-
+        */
         contactInfoBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,10 +113,11 @@ public class SettingActivity extends AppCompatActivity {
         });
 
 
-        sharedPreferences.registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
+
+        //sharedPreferences.registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
 
     }
-
+    /*
     SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
@@ -120,7 +133,7 @@ public class SettingActivity extends AppCompatActivity {
             }
         }
     };
-
+    */
     public void openDialog() {
         new InfoDialog(this).show();
         //infoDialog.show(getSupportFragmentManager(), "info dialog");
@@ -133,7 +146,59 @@ public class SettingActivity extends AppCompatActivity {
             textViewEmail.setText(emailTxt);
     }
     */
+    private void getCurrentUserInfo()
+    {
+        String id = currentUser.getUid();
 
+        dbHelper.getUserRefWithId(id).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User thisUser = dataSnapshot.getValue(User.class);
+                if(thisUser!=null)
+                {
+                    String contactName = thisUser.getEmergencyContactName();
+                    String contactEmail = thisUser.getEmergencyContactEmail();
+                    String contactPhone = thisUser.getEmergencyContactNumber();
+                    textViewName.setText(contactName);
+                    textViewEmail.setText(contactEmail);
+                    textViewPhone.setText(contactPhone);
+                }
+                /*
+                for(DataSnapshot user : dataSnapshot.getChildren()){
+
+                    User thisUser = user.getValue(User.class);
+                    //add each contact to an arraylist and use it to populate a list of contacts
+                    if(thisUser!=null)
+                    {
+                        String contactName = thisUser.getEmergencyContactName();
+                        String contactEmail = thisUser.getEmergencyContactEmail();
+                        String contactPhone = thisUser.getEmergencyContactNumber();
+                        textViewName.setText(contactName);
+                        textViewEmail.setText(contactEmail);
+                        textViewPhone.setText(contactPhone);
+                    }
+                }
+                */
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(SettingActivity.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+    private void initView()
+    {
+        textViewEmail = findViewById(R.id.txtVEmail);
+        textViewName = findViewById(R.id.txtVName);
+        textViewPhone = findViewById(R.id.txtVPhone);
+        contactInfoBTN = findViewById(R.id.contactInfo_btn);
+        dbHelper = new FireBaseDBHelper();
+        authHelper = new FireBaseAuthHelper();
+        currentUser = authHelper.getCurrentUser();
+    }
 /**
  * F
  * I

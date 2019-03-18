@@ -19,6 +19,7 @@ import com.elec390coen.alcoroam.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.w3c.dom.Text;
 
@@ -52,10 +53,14 @@ public class SignUpDialog extends Dialog {
             public void onClick(View v) {
                 final String email = et_dialog_email.getText().toString();
                 final String password = et_dialog_password.getText().toString();
-                if(email.isEmpty() || password.isEmpty())
+                if(email.isEmpty())
                 {
-                    tv_error.setText("*field cannot be empty");
-                }else
+                    et_dialog_email.setError("Field Required");
+                }else if(password.isEmpty())
+                {
+                    et_dialog_password.setError("Field Required");
+                }
+                else
                 {
                     findViewById(R.id.dialog_loading).setVisibility(View.VISIBLE);
                     if(password.equals(et_dialog_password_re.getText().toString()))
@@ -67,8 +72,9 @@ public class SignUpDialog extends Dialog {
                                         findViewById(R.id.dialog_loading);
                                         if(task.isSuccessful())
                                         {
-                                            fireBaseAuthHelper.setCurrentUser(fireBaseAuthHelper.getAuth().getCurrentUser());
-                                            fireBaseDBHelper.addNewUser("Joey",email,password);
+                                            FirebaseUser currentUser = fireBaseAuthHelper.getCurrentUser();
+                                            String currentUserId = currentUser.getUid();
+                                            fireBaseDBHelper.addNewUser(currentUserId,"Joey",email,password);
                                             dismiss();
                                             getContext().startActivity(new Intent(getOwnerActivity(),MainActivity.class));
                                         }else

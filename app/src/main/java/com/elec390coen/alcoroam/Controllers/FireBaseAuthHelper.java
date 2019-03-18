@@ -7,7 +7,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class FireBaseAuthHelper {
 
     private FirebaseAuth mAuth;
-    private FirebaseUser currentUser;
+
     public FireBaseAuthHelper()
     {
         mAuth = FirebaseAuth.getInstance();
@@ -18,17 +18,13 @@ public class FireBaseAuthHelper {
         return mAuth;
     }
 
-    public void setCurrentUser(FirebaseUser currentUser) {
-        this.currentUser = currentUser;
-    }
-
     public FirebaseUser getCurrentUser() {
-        return currentUser;
+        return mAuth.getCurrentUser();
     }
 
     public boolean isUserSignedIn()
     {
-        return currentUser!=null;
+        return mAuth.getCurrentUser()!=null;
     }
 
 }

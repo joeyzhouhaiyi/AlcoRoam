@@ -17,15 +17,26 @@ public class FireBaseDBHelper {
         database = FirebaseDatabase.getInstance();
     }
 
-    public void addNewUser(String name,String email,String password)
+    public void addNewUser(String id, String name,String email,String password)
     {
         DatabaseReference ref = database.getReference("Users");
-
-        String id = ref.push().getKey();
         User newUSer = new User(id,name,email,password);
         ref.child(id).setValue(newUSer);
     }
 
+    //get database reference of user
+    public DatabaseReference getUserRef()
+    {
+        return database.getReference("Users");
+    }
+
+    //get database reference with specific user id
+    public DatabaseReference getUserRefWithId(String id)
+    {
+        return database.getReference("Users").child(id);
+    }
+
+    //save the alcohol reading to server
     public void saveAlcoholTestResult(String reading)
     {
         DatabaseReference ref = database.getReference("AlcoholReading");
@@ -37,6 +48,7 @@ public class FireBaseDBHelper {
         ref.child(currentTimeStamp).setValue(tr);
     }
 
+    //save the hr reading to server
     public void saveHeartRateTestResult(String reading)
     {
         DatabaseReference ref = database.getReference("hrReading");

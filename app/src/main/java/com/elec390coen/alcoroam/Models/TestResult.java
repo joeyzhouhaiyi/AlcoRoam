@@ -2,9 +2,10 @@ package com.elec390coen.alcoroam.Models;
 
 public class TestResult {
 
+    //parameter of test result
     String time;
     String reading;
-    String type;
+    String type; //either alcohol or heart rate
 
     public TestResult(String time, String reading, String type) {
         this.time = time;

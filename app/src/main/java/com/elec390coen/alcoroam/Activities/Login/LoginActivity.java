@@ -65,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
                                     findViewById(R.id.loading).setVisibility(View.GONE);
                                     if(task.isSuccessful())
                                     {
-                                        fireBaseAuthHelper.setCurrentUser(fireBaseAuthHelper.getAuth().getCurrentUser());
+                                        //fireBaseAuthHelper.setCurrentUser(fireBaseAuthHelper.getAuth().getCurrentUser());
                                         startActivity(new Intent(LoginActivity.this,MainActivity.class));
                                         finish();
                                     }else
