@@ -94,6 +94,14 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:paddingTop="10dp" />
+                <CheckBox
+                    android:id="@+id/cb_savelogin"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="10dp"
+                    android:text="Remember me"
+                    android:textColor="@color/app_black" />
 
                 <TextView
                     android:id="@+id/tv_login_error"
@@ -105,6 +113,7 @@
                     android:textColor="@color/app_red"
                     android:textSize="12sp"
                     />
+
                 <Button
                     android:id="@+id/btn_signin"
                     android:layout_width="match_parent"
@@ -139,9 +148,7 @@
                 android:background="@color/background"
                 android:orientation="horizontal"
                 android:paddingLeft="30dp"
-                android:paddingRight="30dp"
-
-                >
+                android:paddingRight="30dp">
 
                 <TextView
                     android:layout_width="0dp"

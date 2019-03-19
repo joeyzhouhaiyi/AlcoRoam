@@ -6,4 +6,39 @@
     android:layout_height="match_parent"
     tools:context=".Activities.Alcohol.AlcoholActivity">
 
+    <TextView
+        android:id="@+id/tv_connection_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="connection status:"
+        android:textSize="30sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="30dp"
+        android:gravity="center"
+        android:textColor="@color/app_black"/>
+    <TextView
+        android:id="@+id/tv_response"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textSize="36sp"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/pb_alcohol_level"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_response" />
 </android.support.constraint.ConstraintLayout>

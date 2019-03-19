@@ -8,4 +8,14 @@
     <string name="new_user">New to AlcoRoam?</string>
     <string name="log_in">Log in</string>
     <string name="password_re">Confirm Password</string>
+    <string name="bluetooth">Bluetooth</string>
+    <string name="enable">Enable</string>
+    <string name="tap_to_connect">Tap to connect</string>
+    <string name="search">SEARCH</string>
+    <string name="stop">STOP</string>
+    <string name="save">Save</string>
+    <string name="mount_device">Mount your device as:</string>
+    <string name="mount_notice">*Note that if you mount your device to incorrect slot, the device will not functioning properly</string>
+    <string name="alcohol">Alcohol</string>
+    <string name="heart">Heart Rate</string>
 </resources>

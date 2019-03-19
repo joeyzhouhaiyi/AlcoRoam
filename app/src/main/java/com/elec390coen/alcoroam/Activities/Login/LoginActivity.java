@@ -9,9 +9,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.CheckBox;
+import android.content.SharedPreferences;
+
 
 import com.elec390coen.alcoroam.Activities.Main.MainActivity;
-import com.elec390coen.alcoroam.Controllers.FireBaseHelper;
+import com.elec390coen.alcoroam.Controllers.FireBaseAuthHelper;
 import com.elec390coen.alcoroam.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -24,7 +27,11 @@ public class LoginActivity extends AppCompatActivity {
     private Button btn_login;
     private Button btn_signup;
     private TextView tv_error;
-    private FireBaseHelper fireBaseHelper;
+    private FireBaseAuthHelper fireBaseAuthHelper;
+    private CheckBox cb_savelogin;
+    private SharedPreferences loginPreferences;
+    private SharedPreferences.Editor loginPrefsEditor;
+    private Boolean saveLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,20 +42,30 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String email = et_email.getText().toString();
-                String pass = et_pass.getText().toString();
-                if(email.isEmpty() || pass.isEmpty())
+                String password = et_pass.getText().toString();
+                if(cb_savelogin.isChecked()){
+                    loginPrefsEditor.putBoolean("saveLogin",true);
+                    loginPrefsEditor.putString("email",email);
+                    loginPrefsEditor.putString("password",password);
+                    loginPrefsEditor.commit();
+                }else {
+                    loginPrefsEditor.clear();
+                    loginPrefsEditor.commit();
+                }
+                if(email.isEmpty() || password.isEmpty())
                 {
                     tv_error.setText("*field cannot be empty");
                 }else
                 {
-                    fireBaseHelper.getAuth().signInWithEmailAndPassword(email,pass)
+                    findViewById(R.id.loading).setVisibility(View.VISIBLE);
+                    fireBaseAuthHelper.getAuth().signInWithEmailAndPassword(email,password)
                             .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     findViewById(R.id.loading).setVisibility(View.GONE);
                                     if(task.isSuccessful())
                                     {
-                                        fireBaseHelper.setCurrentUser(fireBaseHelper.getAuth().getCurrentUser());
+                                        //fireBaseAuthHelper.setCurrentUser(fireBaseAuthHelper.getAuth().getCurrentUser());
                                         startActivity(new Intent(LoginActivity.this,MainActivity.class));
                                         finish();
                                     }else
@@ -58,9 +75,9 @@ public class LoginActivity extends AppCompatActivity {
                                 }
                             });
                 }
-                findViewById(R.id.loading).setVisibility(View.VISIBLE);
             }
         });
+
         btn_signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,12 +88,22 @@ public class LoginActivity extends AppCompatActivity {
 
     private void initView()
     {
-        fireBaseHelper = new FireBaseHelper();
+        fireBaseAuthHelper = new FireBaseAuthHelper();
         et_email = findViewById(R.id.et_email);
         et_pass = findViewById(R.id.et_password);
         btn_login = findViewById(R.id.btn_signin);
         btn_signup = findViewById(R.id.btn_signup);
         tv_error = findViewById(R.id.tv_login_error);
+        cb_savelogin=findViewById(R.id.cb_savelogin);
+        loginPreferences= getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        loginPrefsEditor= loginPreferences.edit();
+
+        saveLogin= loginPreferences.getBoolean("saveLogin",false);
+        if(saveLogin == true){
+            et_email.setText(loginPreferences.getString("email",""));
+            et_pass.setText(loginPreferences.getString("password",""));
+            cb_savelogin.setChecked(true);
+        }
     }
 
 
