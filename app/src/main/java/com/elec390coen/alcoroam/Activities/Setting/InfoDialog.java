@@ -50,17 +50,7 @@ public class InfoDialog extends Dialog {
         initView();
         getCurrentUserInfo();
         //retrieve the data from SharedPreferences
-/*
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-        String phoneString = pref.getString("phone", "");
-        phoneNumber.setText(phoneString);
 
-        String emailString = pref.getString("email", "");
-        email.setText(emailString);
-
-        String nameString = pref.getString("name", "");
-        name.setText(nameString);
-*/
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,16 +68,6 @@ public class InfoDialog extends Dialog {
                     et_phoneNumber.setError("Field Required");
                 }
                 else{
-                    /*
-                    SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-                    SharedPreferences.Editor editor = pref.edit();
-
-                    editor.putString("phone", phoneEntered);
-                    editor.putString("email", emailEntered);
-                    editor.putString("name", nameEntered);
-                    editor.apply();
-                    Toast.makeText(context,"Saved",Toast.LENGTH_LONG).show();
-                    */
                     String id = currentUser.getUid();
                     dbHelper.getUserRefWithId(id).child("emergencyContactName").setValue(nameEntered);
                     dbHelper.getUserRefWithId(id).child("emergencyContactEmail").setValue(emailEntered);
@@ -111,28 +91,18 @@ public class InfoDialog extends Dialog {
                 User thisUser = dataSnapshot.getValue(User.class);
                 if(thisUser!=null)
                 {
+                    //set the contact global varriables
                     String contactName = thisUser.getEmergencyContactName();
+                    //String contactname = thisUser.getEmergencyContactName();
                     String contactEmail = thisUser.getEmergencyContactEmail();
+                    //String contactemail = thisUser.getEmergencyContactEmail();
                     String contactPhone = thisUser.getEmergencyContactNumber();
+                    //String contactnumber = thisUser.getEmergencyContactNumber();
                     et_name.setText(contactName);
                     et_email.setText(contactEmail);
                     et_phoneNumber.setText(contactPhone);
                 }
-                /*
-                for(DataSnapshot user : dataSnapshot.getChildren()){
 
-                    User thisUser = user.getValue(User.class);
-                    //add each contact to an arraylist and use it to populate a list of contacts
-                    if(thisUser!=null)
-                    {
-                        String contactName = thisUser.getEmergencyContactName();
-                        String contactEmail = thisUser.getEmergencyContactEmail();
-                        String contactPhone = thisUser.getEmergencyContactNumber();
-                        et_name.setText(contactName);
-                        et_email.setText(contactEmail);
-                        et_phoneNumber.setText(contactPhone);
-                    }
-                }*/
             }
 
             @Override
