@@ -19,6 +19,7 @@ import com.elec390coen.alcoroam.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -32,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
     private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
     private Boolean saveLogin;
-
+    private FirebaseAuth Auth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +53,9 @@ public class LoginActivity extends AppCompatActivity {
                     loginPrefsEditor.clear();
                     loginPrefsEditor.commit();
                 }
+
+
+
                 if(email.isEmpty() || password.isEmpty())
                 {
                     tv_error.setText("*field cannot be empty");
@@ -103,6 +107,11 @@ public class LoginActivity extends AppCompatActivity {
             et_email.setText(loginPreferences.getString("email",""));
             et_pass.setText(loginPreferences.getString("password",""));
             cb_savelogin.setChecked(true);
+        }
+        Auth = FirebaseAuth.getInstance();
+        if(Auth.getCurrentUser() != null){
+            startActivity(new Intent(this,MainActivity.class));
+            finish();
         }
     }
 
