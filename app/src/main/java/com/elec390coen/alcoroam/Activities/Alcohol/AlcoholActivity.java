@@ -37,6 +37,26 @@ public class AlcoholActivity extends AppCompatActivity {
     private ConnectedThread mConnectedThread;
     private static final UUID BTUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
+    //auto popup and sending call & message **********
+
+    double currtest = 48.88; // current alcohol percentage
+    double ableToDrive = Double.parseDouble(getString(R.string.driveLimit)); //driving limits
+    double veryDrunk = Double.parseDouble(getString(R.string.tooDrunk));      // you are too drunk
+
+    public void test()
+    {
+        if (currtest > ableToDrive && currtest < veryDrunk) {
+            Intent i = new Intent(getApplicationContext(), PopActivity.class);
+            startActivity(i);
+
+        } else if (currtest > veryDrunk) {
+            Intent i2 = new Intent(getApplicationContext(), Pop2Activity.class);
+            startActivity(i2);
+        }
+    }
+
+
+    //end **************
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +64,7 @@ public class AlcoholActivity extends AppCompatActivity {
         initUI();
 
     }
+
 
     @Override
     public void onResume() {
@@ -169,6 +190,7 @@ public class AlcoholActivity extends AppCompatActivity {
         pb_alcohol_level = findViewById(R.id.pb_alcohol_level);
         tv_connection_status = findViewById(R.id.tv_connection_status);
     }
+
 }
 
 

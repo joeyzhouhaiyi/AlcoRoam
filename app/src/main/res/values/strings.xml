@@ -21,4 +21,6 @@
     <string name="contactnumber">thisUser.getEmergencyContactNumber()</string>
     <string name="contactemail">thisUser.getEmergencyContactEmail()</string>
     <string name="contactname">thisUser.getEmergencyContactName()</string>
+    <string name="driveLimit">30.88</string>
+    <string name="tooDrunk">200.88</string>
 </resources>
