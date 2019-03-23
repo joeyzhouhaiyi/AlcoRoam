@@ -30,6 +30,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView tv_error;
     private FireBaseAuthHelper fireBaseAuthHelper;
     private CheckBox cb_savelogin;
+    private CheckBox cb_autologin;
     private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
     private Boolean saveLogin;
@@ -53,6 +54,16 @@ public class LoginActivity extends AppCompatActivity {
                     loginPrefsEditor.clear();
                     loginPrefsEditor.commit();
                 }
+                if(cb_autologin.isChecked()){
+                    loginPrefsEditor.putBoolean("saveLogin",true);
+                    loginPrefsEditor.putString("email",email);
+                    loginPrefsEditor.putString("password",password);
+                    loginPrefsEditor.commit();
+                }else {
+                    loginPrefsEditor.clear();
+                    loginPrefsEditor.commit();
+                }
+
 
 
 
@@ -99,6 +110,7 @@ public class LoginActivity extends AppCompatActivity {
         btn_signup = findViewById(R.id.btn_signup);
         tv_error = findViewById(R.id.tv_login_error);
         cb_savelogin=findViewById(R.id.cb_savelogin);
+        cb_autologin=findViewById(R.id.cb_autologin);
         loginPreferences= getSharedPreferences("loginPrefs", MODE_PRIVATE);
         loginPrefsEditor= loginPreferences.edit();
 
@@ -109,7 +121,7 @@ public class LoginActivity extends AppCompatActivity {
             cb_savelogin.setChecked(true);
         }
         Auth = FirebaseAuth.getInstance();
-        if(Auth.getCurrentUser() != null){
+        if(Auth.getCurrentUser()!=null){
             startActivity(new Intent(this,MainActivity.class));
             finish();
         }

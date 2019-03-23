@@ -96,12 +96,20 @@
                     android:paddingTop="10dp" />
                 <CheckBox
                     android:id="@+id/cb_savelogin"
-                    android:layout_width="fill_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_marginLeft="10dp"
                     android:text="Remember me"
                     android:textColor="@color/app_black" />
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="Auto Login"
+                    android:id="@+id/cb_autologin"
+                    />
+
 
                 <TextView
                     android:id="@+id/tv_login_error"
