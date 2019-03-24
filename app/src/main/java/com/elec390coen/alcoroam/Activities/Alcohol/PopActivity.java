@@ -1,6 +1,7 @@
 package com.elec390coen.alcoroam.Activities.Alcohol;
 
 import android.app.Activity;
+import android.net.Uri;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -11,6 +12,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.content.Intent;
 
 import com.elec390coen.alcoroam.R;
 
@@ -38,14 +40,20 @@ public class PopActivity extends Activity {
         homeBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //
+                String number = getString(R.string.contactnumber);
+                Intent intent = new Intent(Intent.ACTION_CALL);
+                intent.setData(Uri.parse("tel:" +number));
+                startActivity(intent);
             }
         });
 
         taxiBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //call taxi
+                String number2 = "5144001005";
+                Intent intent = new Intent(Intent.ACTION_CALL);
+                intent.setData(Uri.parse("tel:" +number2));
+                startActivity(intent);
             }
         });
 
