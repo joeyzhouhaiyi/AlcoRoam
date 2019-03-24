@@ -38,7 +38,7 @@ public class PopActivity extends Activity {
         homeBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //call home
+                //
             }
         });
 
