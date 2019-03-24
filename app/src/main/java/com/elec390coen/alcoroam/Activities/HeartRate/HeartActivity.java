@@ -205,7 +205,7 @@ public class HeartActivity<GraphView, LineGraphView> extends AppCompatActivity {
             {
 
                     String HeartRatetext = msg.getData().getString("HeartRate");
-                    tv = (EditText) findViewById(R.id.hrValueView);
+                    tv = findViewById(R.id.hrValueView);
                     System.out.println("Heart Rate Info is "+ HeartRatetext);
                     if (tv != null)tv.setText(HeartRatetext);
 
