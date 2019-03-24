@@ -5,14 +5,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.elec390coen.alcoroam.Activities.Alcohol.AlcoholActivity;
 import com.elec390coen.alcoroam.Activities.HeartRate.HeartActivity;
 import com.elec390coen.alcoroam.Activities.Login.LoginActivity;
 import com.elec390coen.alcoroam.Activities.Setting.SettingActivity;
 import com.elec390coen.alcoroam.Activities.bluetooth.BluetoothActivity;
+import com.elec390coen.alcoroam.Controllers.FireBaseDBHelper;
+import com.elec390coen.alcoroam.Models.TestResult;
 import com.elec390coen.alcoroam.R;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,13 +29,26 @@ public class MainActivity extends AppCompatActivity {
     Button btn_hr;
     Button btn_bluetooth;
     Button btn_logout;
+    Button btn_debug;
     private FirebaseAuth firebaseAuth;
+    private FireBaseDBHelper fireBaseDBHelper;
 
-
+    List<TestResult> results = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.style_activity_main);
+        fireBaseDBHelper = new FireBaseDBHelper();
+
+        //debug
+        btn_debug = findViewById(R.id.btn_debug);
+        btn_debug.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fireBaseDBHelper.fetchUserAlcoholReading(firebaseAuth.getCurrentUser(),results);
+                Toast.makeText(MainActivity.this, "Fetch Complete", Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
         //settings
@@ -83,4 +104,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+
 }

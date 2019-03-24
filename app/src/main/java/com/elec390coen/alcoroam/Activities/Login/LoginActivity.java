@@ -19,6 +19,7 @@ import com.elec390coen.alcoroam.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -29,10 +30,11 @@ public class LoginActivity extends AppCompatActivity {
     private TextView tv_error;
     private FireBaseAuthHelper fireBaseAuthHelper;
     private CheckBox cb_savelogin;
+    private CheckBox cb_atlogin;
     private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
     private Boolean saveLogin;
-
+    private FirebaseAuth Auth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +54,19 @@ public class LoginActivity extends AppCompatActivity {
                     loginPrefsEditor.clear();
                     loginPrefsEditor.commit();
                 }
+                if(cb_atlogin.isChecked()){
+                    loginPrefsEditor.putBoolean("saveLogin",true);
+                    loginPrefsEditor.putString("email",email);
+                    loginPrefsEditor.putString("password",password);
+                    loginPrefsEditor.commit();
+                }else {
+                    loginPrefsEditor.clear();
+                    loginPrefsEditor.commit();
+                }
+
+
+
+
                 if(email.isEmpty() || password.isEmpty())
                 {
                     tv_error.setText("*field cannot be empty");
@@ -95,6 +110,7 @@ public class LoginActivity extends AppCompatActivity {
         btn_signup = findViewById(R.id.btn_signup);
         tv_error = findViewById(R.id.tv_login_error);
         cb_savelogin=findViewById(R.id.cb_savelogin);
+        cb_atlogin=findViewById(R.id.cb_atlogin);
         loginPreferences= getSharedPreferences("loginPrefs", MODE_PRIVATE);
         loginPrefsEditor= loginPreferences.edit();
 
@@ -103,6 +119,11 @@ public class LoginActivity extends AppCompatActivity {
             et_email.setText(loginPreferences.getString("email",""));
             et_pass.setText(loginPreferences.getString("password",""));
             cb_savelogin.setChecked(true);
+        }
+        Auth = FirebaseAuth.getInstance();
+        if(Auth.getCurrentUser()!=null){
+            startActivity(new Intent(this,MainActivity.class));
+            finish();
         }
     }
 

@@ -18,4 +18,9 @@
     <string name="mount_notice">*Note that if you mount your device to incorrect slot, the device will not functioning properly</string>
     <string name="alcohol">Alcohol</string>
     <string name="heart">Heart Rate</string>
+    <string name="contactnumber">thisUser.getEmergencyContactNumber()</string>
+    <string name="contactemail">thisUser.getEmergencyContactEmail()</string>
+    <string name="contactname">thisUser.getEmergencyContactName()</string>
+    <string name="driveLimit">30.88</string>
+    <string name="tooDrunk">200.88</string>
 </resources>

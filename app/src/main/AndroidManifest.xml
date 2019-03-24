@@ -2,10 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.elec390coen.alcoroam">
 
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -13,20 +14,38 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".Activities.bluetooth.BluetoothActivity"></activity>
-        <activity android:name=".Activities.Main.MainActivity"></activity>
-        <activity android:name=".Activities.Alcohol.AlcoholActivity" />
-        <activity android:name=".Activities.Login.LoginActivity"></activity>
+        <activity android:name=".Activities.Alcohol.Pop2Activity" android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.PopMe"></activity>
+        <activity
+            android:name=".Activities.Alcohol.PopActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.PopMe"></activity>
+        <activity
+            android:name=".Activities.bluetooth.BluetoothActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.Main.MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.Alcohol.AlcoholActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.Login.LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.HeartRate.HeartActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.Setting.SettingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.Splash.SplashActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-
-        <activity android:name=".Activities.HeartRate.HeartActivity" />
-        <activity android:name=".Activities.Setting.SettingActivity" />
-        <activity android:name=".Activities.Splash.SplashActivity" >
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 
