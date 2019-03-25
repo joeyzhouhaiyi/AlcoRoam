@@ -1,12 +1,20 @@
 package com.elec390coen.alcoroam.Controllers;
 
+import android.support.annotation.NonNull;
+
 import com.elec390coen.alcoroam.Models.TestResult;
 import com.elec390coen.alcoroam.Models.User;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class FireBaseDBHelper {
 
@@ -22,6 +30,32 @@ public class FireBaseDBHelper {
         DatabaseReference ref = database.getReference("Users");
         User newUSer = new User(id,name,email,password);
         ref.child(id).setValue(newUSer);
+    }
+
+    public void saveAlcoholReadingToUser(String userId, List<TestResult> results)
+    {
+        DatabaseReference ref = database.getReference("Users");
+        ref.child(userId).child("AlcoholReadings").setValue(results);
+    }
+
+    public void fetchUserAlcoholReading(FirebaseUser user, final List<TestResult> resultList)
+    {
+        database.getReference("Users").child(user.getUid()).child("AlcoholReadings").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot readingSnapshot: dataSnapshot.getChildren()) {
+                    TestResult t = readingSnapshot.getValue(TestResult.class);
+                    resultList.add(t);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
     }
 
     //get database reference of user

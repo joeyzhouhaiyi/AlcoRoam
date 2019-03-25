@@ -7,6 +7,10 @@ public class TestResult {
     String reading;
     String type; //either alcohol or heart rate
 
+    public TestResult()
+    {}
+
+
     public TestResult(String time, String reading, String type) {
         this.time = time;
         this.reading = reading;

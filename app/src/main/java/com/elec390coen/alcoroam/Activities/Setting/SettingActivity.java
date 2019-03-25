@@ -1,9 +1,11 @@
 package com.elec390coen.alcoroam.Activities.Setting;
 
+import android.Manifest;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -46,6 +48,7 @@ public class SettingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.style_activity_setting);
 
+        ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},123);
         initView();
         getCurrentUserInfo();
         textViewLat = findViewById(R.id.GPS_latView);
@@ -63,6 +66,7 @@ public class SettingActivity extends AppCompatActivity {
                         double lon = l.getLongitude();
                         textViewLat.setText(Double.toString(lat));
                         textViewLon.setText(Double.toString(lon));
+                        //Toast.makeText(getApplicationContext(), "LAT:" +lat+"\n LON:" +lon, Toast.LENGTH_SHORT).show();
                     }
 
 

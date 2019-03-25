@@ -17,12 +17,19 @@ import android.widget.Toast;
 import com.elec390coen.alcoroam.Activities.bluetooth.BluetoothActivity;
 import com.elec390coen.alcoroam.Activities.bluetooth.ConnectBT;
 import com.elec390coen.alcoroam.Controllers.DeviceManager;
+import com.elec390coen.alcoroam.Controllers.FireBaseAuthHelper;
+import com.elec390coen.alcoroam.Controllers.FireBaseDBHelper;
 import com.elec390coen.alcoroam.Models.CurrentAlcoholSensor;
+import com.elec390coen.alcoroam.Models.TestResult;
 import com.elec390coen.alcoroam.R;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 public class AlcoholActivity extends AppCompatActivity {
@@ -37,11 +44,14 @@ public class AlcoholActivity extends AppCompatActivity {
     private ConnectedThread mConnectedThread;
     private static final UUID BTUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
+    List<TestResult> results = new ArrayList<>();
+    FireBaseDBHelper fireBaseDBHelper;
+    FireBaseAuthHelper fireBaseAuthHelper;
     //auto popup and sending call & message **********
 
-    double currtest = 48.88; // current alcohol percentage
-    double ableToDrive = Double.parseDouble(getString(R.string.driveLimit)); //driving limits
-    double veryDrunk = Double.parseDouble(getString(R.string.tooDrunk));      // you are too drunk
+    private double currtest; // current alcohol percentage
+    private double ableToDrive;
+    private double veryDrunk;     // you are too drunk
 
     public void test()
     {
@@ -62,7 +72,10 @@ public class AlcoholActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.style_activity_alcohol);
         initUI();
-
+        ableToDrive = Double.parseDouble(getString(R.string.driveLimit)); //driving limits
+        veryDrunk = Double.parseDouble(getString(R.string.tooDrunk));      // you are too drunk
+        currtest = 248.88;
+        test();
     }
 
 
@@ -115,7 +128,7 @@ public class AlcoholActivity extends AppCompatActivity {
 
                             String sensor0 = recDataString.substring(1, dataLength);
                             viewData.setText("Data length = "+dataLength+". Sensor reading = " + sensor0 + "ml/g");    //update the textviews with sensor values
-
+                            getMaxData(sensor0);
                         }
                         recDataString.delete(0, recDataString.length());                    //clear all string data
                         // strIncom =" ";
@@ -126,6 +139,36 @@ public class AlcoholActivity extends AppCompatActivity {
         };
     }
 
+    private static int counter=0;
+    private double maxReading =0;
+    private void getMaxData(String reading)
+    {
+        if(counter<10)
+        {
+            double thisReading = Double.parseDouble(reading);
+            if(thisReading > maxReading)
+            {
+                maxReading = thisReading;
+            }
+        }else
+        {
+            counter = 0;
+            if(results.size()==10)
+                results.remove(0);
+
+            results.add(new TestResult(getCurrentTime(),String.valueOf(maxReading),"Alcohol"));
+            fireBaseDBHelper.saveAlcoholReadingToUser(fireBaseAuthHelper.getCurrentUser().getUid(),results);
+            maxReading=0;
+        }
+        counter++;
+    }
+
+    private String getCurrentTime()
+    {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String currentTimeStamp = simpleDateFormat.format(new Date());
+        return currentTimeStamp;
+    }
 
     private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {
 
@@ -189,6 +232,8 @@ public class AlcoholActivity extends AppCompatActivity {
         viewData = findViewById(R.id.tv_response);
         pb_alcohol_level = findViewById(R.id.pb_alcohol_level);
         tv_connection_status = findViewById(R.id.tv_connection_status);
+        fireBaseDBHelper = new FireBaseDBHelper();
+        fireBaseAuthHelper = new FireBaseAuthHelper();
     }
 
 }

@@ -103,15 +103,14 @@
                     android:textColor="@color/app_white"
                     />
                 <CheckBox
-                    android:id="@+id/cb_autologin"
+                    android:id="@+id/cb_atlogin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Auto Login"
                     android:textColor="@color/app_white"
                     android:layout_marginLeft="30dp"
-                    />
 
-
+                />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="wrap_content"

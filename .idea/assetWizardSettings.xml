@@ -127,25 +127,10 @@
                   <entry key="vectorAssetStep">
                     <value>
                       <PersistentState>
-                        <option name="children">
-                          <map>
-                            <entry key="clipartAsset">
-                              <value>
-                                <PersistentState>
-                                  <option name="values">
-                                    <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/navigation/ic_chevron_right_black_24dp.xml" />
-                                    </map>
-                                  </option>
-                                </PersistentState>
-                              </value>
-                            </entry>
-                          </map>
-                        </option>
                         <option name="values">
                           <map>
-                            <entry key="color" value="2772b1" />
-                            <entry key="outputName" value="ic_right" />
+                            <entry key="color" value="ffffff" />
+                            <entry key="outputName" value="ic_temp" />
                             <entry key="sourceFile" value="C:\Users\joeha" />
                           </map>
                         </option>
