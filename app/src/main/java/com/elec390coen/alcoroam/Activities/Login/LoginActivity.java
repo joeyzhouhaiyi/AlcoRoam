@@ -69,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 if(email.isEmpty() || password.isEmpty())
                 {
-                    tv_error.setText("*field cannot be empty");
+                    tv_error.setError("*field cannot be empty");
                 }else
                 {
                     findViewById(R.id.loading).setVisibility(View.VISIBLE);
