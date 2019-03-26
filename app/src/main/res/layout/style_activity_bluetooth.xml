@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.elec390coen.alcoroam.Activities.Main.MainActivity">
+    tools:context="com.elec390coen.alcoroam.Activities.Main.MainActivity"
+    android:background="@drawable/login_bg">
 
 
     <TextView
@@ -30,7 +31,7 @@
         android:paddingRight="10dp"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
-        android:background="@color/app_white">
+        android:background="@color/transparent">
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -74,38 +75,35 @@
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/app_white"
+        android:background="@color/transparent"
         android:id="@+id/list_view"
         android:layout_below="@+id/tap_to_connect"
         android:layout_above="@+id/fl_button"
         />
 
-    <FrameLayout
+    <RelativeLayout
         android:id="@+id/fl_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:background="@color/border_general"
+        android:background="@color/transparent"
         android:layout_margin="10dp"
-        android:padding="1dp">
+        android:padding="1dp"
+
+        >
 
         <Button
             android:id="@+id/btn_search"
-            android:layout_width="160dp"
+            android:layout_width="120dp"
             android:layout_height="60dp"
             android:text="@string/search"
-            android:background="@color/app_white"/>
+            android:background="@color/transparent"
+            android:drawableLeft="@drawable/ic_bluetooth"
+            android:layout_centerHorizontal="true"/>
 
-        <ImageView
-            android:elevation="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_bluetooth"
-            android:padding="10dp"
-            android:layout_gravity="center|left"
-            />
-    </FrameLayout>
+
+    </RelativeLayout>
 
 
 
