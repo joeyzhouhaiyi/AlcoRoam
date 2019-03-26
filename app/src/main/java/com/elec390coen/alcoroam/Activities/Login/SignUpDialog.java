@@ -100,6 +100,7 @@ public class SignUpDialog extends Dialog {
     private void initView()
     {
         et_dialog_email = findViewById(R.id.et_dialog_email);
+        et_dialog_nickname = findViewById(R.id.et_dialog_nickname);
         et_dialog_password = findViewById(R.id.et_dialog_password);
         et_dialog_password_re = findViewById(R.id.et_dialog_password_re);
         btn_dialog_signup = findViewById(R.id.btn_dialog_signup);
