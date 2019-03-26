@@ -35,6 +35,7 @@ import java.util.UUID;
 public class AlcoholActivity extends AppCompatActivity {
     TextView viewData;
     TextView tv_connection_status;
+    TextView tv_risk;
     Handler btin;
     ProgressBar pb_alcohol_level;
 
@@ -74,7 +75,9 @@ public class AlcoholActivity extends AppCompatActivity {
         initUI();
         ableToDrive = Double.parseDouble(getString(R.string.driveLimit)); //driving limits
         veryDrunk = Double.parseDouble(getString(R.string.tooDrunk));      // you are too drunk
-        currtest = 248.88;
+        currtest = 35.88;
+        //results.clear();
+        //fireBaseDBHelper.fetchUserAlcoholReading(fireBaseAuthHelper.getCurrentUser(),results);
         test();
     }
 
@@ -127,7 +130,10 @@ public class AlcoholActivity extends AppCompatActivity {
                         {
 
                             String sensor0 = recDataString.substring(1, dataLength);
-                            viewData.setText("Data length = "+dataLength+". Sensor reading = " + sensor0 + "ml/g");    //update the textviews with sensor values
+                            double reading = Double.parseDouble(sensor0);
+                            pb_alcohol_level.setProgress((int)reading/10);
+                            setRiskLevel(reading);
+                            viewData.setText("Sensor reading = " + sensor0 + "mg/L");    //update the textviews with sensor values
                             getMaxData(sensor0);
                         }
                         recDataString.delete(0, recDataString.length());                    //clear all string data
@@ -139,6 +145,7 @@ public class AlcoholActivity extends AppCompatActivity {
         };
     }
 
+    //get the max result every 10s and save it to database
     private static int counter=0;
     private double maxReading =0;
     private void getMaxData(String reading)
@@ -230,12 +237,29 @@ public class AlcoholActivity extends AppCompatActivity {
     private void initUI()
     {
         viewData = findViewById(R.id.tv_response);
+        tv_risk = findViewById(R.id.tv_riskLevel);
         pb_alcohol_level = findViewById(R.id.pb_alcohol_level);
         tv_connection_status = findViewById(R.id.tv_connection_status);
         fireBaseDBHelper = new FireBaseDBHelper();
         fireBaseAuthHelper = new FireBaseAuthHelper();
     }
 
+    public void setRiskLevel(double reading){
+        if(reading<500.00)
+        {
+            tv_risk.setText("Risk: LOW");
+        }else if(reading >=500.0 && reading < 800.0)
+        {
+            tv_risk.setText("Risk: MEDIUM");
+        }else if(reading>=800 && reading < 900)
+        {
+            tv_risk.setText("Risk: HIGH!");
+        }else
+        {
+            tv_risk.setText("Risk: VERY HIGH!!!!!");
+        }
+
+    }
 }
 
 

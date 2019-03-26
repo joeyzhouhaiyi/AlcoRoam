@@ -34,7 +34,7 @@ public class Pop2Activity extends Activity {
         textHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SmsManager.getDefault().sendTextMessage(getString(R.string.contactnumber), null, "Hello" + getString(R.string.contactname)+ "Please come pick me up", null,null);
+                SmsManager.getDefault().sendTextMessage("5142240057", null, "Hello Joey Please come pick me up", null,null);
 
             }
         });

@@ -44,13 +44,24 @@
         android:id="@+id/btn_debug"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="371dp"
         android:background="#F5DEB3"
-        android:text="Save Reading"
+        android:text="Fetch Reading"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/btn_logout"
+ />
+
+    <Button
+        android:id="@+id/btn_display"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:background="#F5DEB3"
+        android:text="Display Reading"
+        app:layout_constraintBottom_toTopOf="@+id/btn_debug"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.50"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btn_setting"
@@ -63,7 +74,7 @@
         android:text="Settings"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintHorizontal_bias="0.50"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.571" />
@@ -109,13 +120,20 @@
         android:id="@+id/btn_logout"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:layout_marginStart="160dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="72dp"
         android:text="Logout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.006"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ListView
+        android:id="@+id/lv_reading"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btn_display"
+        >
+
+    </ListView>
 
 </android.support.constraint.ConstraintLayout>

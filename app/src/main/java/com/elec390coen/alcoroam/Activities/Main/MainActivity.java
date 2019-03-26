@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.elec390coen.alcoroam.Activities.Alcohol.AlcoholActivity;
@@ -30,8 +32,11 @@ public class MainActivity extends AppCompatActivity {
     Button btn_bluetooth;
     Button btn_logout;
     Button btn_debug;
+    Button btn_display;
+
     private FirebaseAuth firebaseAuth;
     private FireBaseDBHelper fireBaseDBHelper;
+    ListView lv_readings;
 
     List<TestResult> results = new ArrayList<>();
     @Override
@@ -39,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.style_activity_main);
         fireBaseDBHelper = new FireBaseDBHelper();
+
+        lv_readings = findViewById(R.id.lv_reading);
 
         //debug
         btn_debug = findViewById(R.id.btn_debug);
@@ -49,7 +56,13 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Fetch Complete", Toast.LENGTH_SHORT).show();
             }
         });
-
+        btn_display = findViewById(R.id.btn_display);
+        btn_display.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                processData(results);
+            }
+        });
 
         //settings
         btn_setting = findViewById(R.id.btn_setting);
@@ -105,5 +118,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void processData(List<TestResult> resultList)
+    {
+        List<String> readableResults = new ArrayList<>();
+        for(TestResult t : resultList)
+        {
+            readableResults.add(t.getReading()+"mg/L at "+ t.getTime());
+        }
+        lv_readings.setAdapter(new ArrayAdapter<String>(MainActivity.this,android.R.layout.simple_list_item_1,readableResults));
+    }
 
 }

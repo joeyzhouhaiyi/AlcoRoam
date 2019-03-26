@@ -59,16 +59,19 @@ public class SettingActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked == true){
                     Toast.makeText(SettingActivity.this, "GPS Activated", Toast.LENGTH_SHORT).show();
-                    GPStracker g = new GPStracker(getApplicationContext());
-                    Location l = g.getLocation();
+                    GPStracker g = new GPStracker(SettingActivity.this);
+                    g.getLocation();
+                    Location l = g.getMyLocation();
                     if (l != null){
                         double lat = l.getLatitude();
                         double lon = l.getLongitude();
                         textViewLat.setText(Double.toString(lat));
                         textViewLon.setText(Double.toString(lon));
                         //Toast.makeText(getApplicationContext(), "LAT:" +lat+"\n LON:" +lon, Toast.LENGTH_SHORT).show();
+                    }else
+                    {
+                        Toast.makeText(SettingActivity.this, "Location is null", Toast.LENGTH_SHORT).show();
                     }
-
 
                 }
                 else {
