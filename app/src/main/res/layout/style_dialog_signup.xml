@@ -11,7 +11,7 @@
             android:layout_width="260dp"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:background="@drawable/shape_dialog"
+            android:background="@drawable/login_bg"
             android:orientation="vertical">
 
             <TextView
@@ -21,7 +21,7 @@
                 android:layout_margin="15dp"
                 android:gravity="center"
                 android:text="@string/sign_up"
-                android:textColor="@color/app_black"
+                android:textColor="@color/app_white"
                 android:textStyle="bold"
                 android:textSize="16sp" />
             <View
@@ -30,19 +30,19 @@
                 android:layout_marginLeft="40dp"
                 android:layout_marginRight="40dp"
                 android:layout_marginBottom="20dp"
-                android:background="@color/app_black"/>
+                android:background="@color/app_white"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/app_white"
+                android:background="@drawable/login_bg"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="@string/email"
-                    android:textColor="@color/app_black"
+                    android:textColor="@color/app_white"
                     android:textStyle="bold"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
@@ -52,17 +52,45 @@
                 <EditText
                     android:id="@+id/et_dialog_email"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="32dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:textColor="@color/app_white"
+                    android:background="@drawable/et_bg"
+                    android:drawableLeft="@drawable/ic_email"
+                    android:inputType="textEmailAddress" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/nickname"
+                    android:textColor="@color/app_white"
+                    android:textStyle="bold"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
                     android:paddingTop="10dp"
+                    />
+
+                <EditText
+                    android:id="@+id/et_dialog_nickname"
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:background="@drawable/et_bg"
+                    android:textColor="@color/app_white"
+                    android:drawableLeft="@drawable/ic_user"
                     android:inputType="textEmailAddress" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="@string/password"
-                    android:textColor="@color/app_black"
+                    android:textColor="@color/app_white"
                     android:textStyle="bold"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
@@ -72,17 +100,22 @@
                 <EditText
                     android:id="@+id/et_dialog_password"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="32dp"
                     android:inputType="textPassword"
+                    android:background="@drawable/et_bg"
+                    android:textColor="@color/app_white"
+                    android:drawableLeft="@drawable/ic_pass"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:paddingTop="10dp" />
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="@string/password_re"
-                    android:textColor="@color/app_black"
+                    android:textColor="@color/app_white"
                     android:textStyle="bold"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
@@ -92,11 +125,15 @@
                 <EditText
                     android:id="@+id/et_dialog_password_re"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="32dp"
                     android:inputType="textPassword"
+                    android:background="@drawable/et_bg"
+                    android:textColor="@color/app_white"
+                    android:drawableLeft="@drawable/ic_verify"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:paddingTop="10dp" />
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"/>
 
                 <TextView
                     android:id="@+id/tv_signup_error"
@@ -114,12 +151,11 @@
 
             <Button
                 android:id="@+id/btn_dialog_signup"
-                android:layout_width="match_parent"
+                android:layout_width="80dp"
                 android:layout_height="36dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
+                android:layout_gravity="center"
                 android:layout_marginBottom="20dp"
-                android:background="@color/btn_green"
+                android:background="@drawable/btn_bg"
                 android:text="@string/sign_up"
                 android:textAllCaps="false"
                 android:textColor="@color/app_white" />

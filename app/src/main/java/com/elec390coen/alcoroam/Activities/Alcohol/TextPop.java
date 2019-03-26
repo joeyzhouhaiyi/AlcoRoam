@@ -1,6 +1,8 @@
 package com.elec390coen.alcoroam.Activities.Alcohol;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.Button;
@@ -15,14 +17,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.widget.Toast;
 
+import com.elec390coen.alcoroam.Models.GPSLocation;
 import com.elec390coen.alcoroam.R;
 
-public class Pop2Activity extends Activity {
+public class TextPop extends Activity {
 
     Button textHome;
 
 
-
+    private static final int PERMISSION_REQUEST_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,19 +37,34 @@ public class Pop2Activity extends Activity {
         textHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SmsManager.getDefault().sendTextMessage("5142240057", null, "Hello Joey Please come pick me up", null,null);
+                SmsManager.getDefault().sendTextMessage("5142240057"
+                        , null, "Hello Joey Please come pick me up at: Longitude:"+
+                        GPSLocation.getInstance().getLon()+", Latitude: "
+                                + GPSLocation.getInstance().getLat()+"!", null,null);
 
             }
         });
 
 
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+
+            if (checkSelfPermission(Manifest.permission.SEND_SMS)
+                    == PackageManager.PERMISSION_DENIED) {
+
+                Log.d("permission", "permission denied to SEND_SMS - requesting it");
+                String[] permissions = {Manifest.permission.SEND_SMS};
+
+                requestPermissions(permissions, PERMISSION_REQUEST_CODE);
+
+            }
+        }
 
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 
         int width = dm.widthPixels;
         int height = dm.heightPixels;
-        getWindow().setLayout((int)(width*.6), (int)(height*.4));
+        getWindow().setLayout((int)(width*.9), (int)(height*.9));
 
         WindowManager.LayoutParams params = getWindow().getAttributes();
         params.gravity = Gravity.CENTER;

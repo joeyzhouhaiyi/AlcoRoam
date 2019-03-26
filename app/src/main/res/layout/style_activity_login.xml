@@ -47,7 +47,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Username"
+                        android:text="@string/email"
                         android:textStyle="bold"
                         android:textColor="@color/app_white"
                         android:textSize="15sp"/>
@@ -57,7 +57,7 @@
                         android:layout_height="40dp"
                         android:layout_marginTop="5dp"
                         android:background="@drawable/et_bg"
-                        android:drawableLeft="@drawable/ic_user"
+                        android:drawableLeft="@drawable/ic_email"
                         android:textColor="@color/app_white"
                         android:paddingLeft="15dp"
                         android:paddingRight="15dp"

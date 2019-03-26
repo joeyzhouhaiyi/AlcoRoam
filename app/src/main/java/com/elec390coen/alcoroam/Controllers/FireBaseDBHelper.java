@@ -70,6 +70,7 @@ public class FireBaseDBHelper {
         return database.getReference("Users").child(id);
     }
 
+
     //save the alcohol reading to server
     public void saveAlcoholTestResult(String reading)
     {

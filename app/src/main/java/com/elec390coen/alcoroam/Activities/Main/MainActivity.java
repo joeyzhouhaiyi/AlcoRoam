@@ -1,12 +1,14 @@
 package com.elec390coen.alcoroam.Activities.Main;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.elec390coen.alcoroam.Activities.Alcohol.AlcoholActivity;
@@ -16,8 +18,12 @@ import com.elec390coen.alcoroam.Activities.Setting.SettingActivity;
 import com.elec390coen.alcoroam.Activities.bluetooth.BluetoothActivity;
 import com.elec390coen.alcoroam.Controllers.FireBaseDBHelper;
 import com.elec390coen.alcoroam.Models.TestResult;
+import com.elec390coen.alcoroam.Models.User;
 import com.elec390coen.alcoroam.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     Button btn_logout;
     Button btn_debug;
     Button btn_display;
+    TextView tv_welcome;
 
     private FirebaseAuth firebaseAuth;
     private FireBaseDBHelper fireBaseDBHelper;
@@ -45,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.style_activity_main);
         fireBaseDBHelper = new FireBaseDBHelper();
 
-        lv_readings = findViewById(R.id.lv_reading);
+        //lv_readings = findViewById(R.id.lv_reading);
 
         //debug
         btn_debug = findViewById(R.id.btn_debug);
@@ -56,13 +63,14 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Fetch Complete", Toast.LENGTH_SHORT).show();
             }
         });
+        /*
         btn_display = findViewById(R.id.btn_display);
         btn_display.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 processData(results);
             }
-        });
+        });*/
 
         //settings
         btn_setting = findViewById(R.id.btn_setting);
@@ -115,6 +123,22 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this,LoginActivity.class));
             }
         });
+
+        //welcome
+        tv_welcome = findViewById(R.id.tv_welcome);
+        fireBaseDBHelper.getUserRefWithId(firebaseAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User thisUser = dataSnapshot.getValue(User.class);
+                tv_welcome.setText("Welcome, "+thisUser.getName() +"!");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
 
     }
 

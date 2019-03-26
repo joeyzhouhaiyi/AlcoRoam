@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.elec390coen.alcoroam.Controllers.FireBaseAuthHelper;
 import com.elec390coen.alcoroam.Controllers.FireBaseDBHelper;
+import com.elec390coen.alcoroam.Models.GPSLocation;
 import com.elec390coen.alcoroam.Models.User;
 import com.elec390coen.alcoroam.R;
 import com.google.firebase.auth.FirebaseUser;
@@ -65,6 +66,9 @@ public class SettingActivity extends AppCompatActivity {
                     if (l != null){
                         double lat = l.getLatitude();
                         double lon = l.getLongitude();
+                        GPSLocation myLocation = GPSLocation.getInstance();
+                        myLocation.setLat(String.valueOf(lat));
+                        myLocation.setLon(String.valueOf(lon));
                         textViewLat.setText(Double.toString(lat));
                         textViewLon.setText(Double.toString(lon));
                         //Toast.makeText(getApplicationContext(), "LAT:" +lat+"\n LON:" +lon, Toast.LENGTH_SHORT).show();

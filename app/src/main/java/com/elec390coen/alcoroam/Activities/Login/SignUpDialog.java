@@ -28,6 +28,7 @@ public class SignUpDialog extends Dialog {
     private EditText et_dialog_email;
     private EditText et_dialog_password;
     private EditText et_dialog_password_re;
+    private EditText et_dialog_nickname;
     private Button btn_dialog_signup;
     private FireBaseAuthHelper fireBaseAuthHelper;
     private FireBaseDBHelper fireBaseDBHelper;
@@ -52,6 +53,7 @@ public class SignUpDialog extends Dialog {
             @Override
             public void onClick(View v) {
                 final String email = et_dialog_email.getText().toString();
+                final String nickname = et_dialog_nickname.getText().toString();
                 final String password = et_dialog_password.getText().toString();
                 if(email.isEmpty())
                 {
@@ -59,6 +61,9 @@ public class SignUpDialog extends Dialog {
                 }else if(password.isEmpty())
                 {
                     et_dialog_password.setError("Field Required");
+                }else if(nickname.isEmpty())
+                {
+                    et_dialog_nickname.setError("Field Required");
                 }
                 else
                 {
@@ -74,7 +79,7 @@ public class SignUpDialog extends Dialog {
                                         {
                                             FirebaseUser currentUser = fireBaseAuthHelper.getCurrentUser();
                                             String currentUserId = currentUser.getUid();
-                                            fireBaseDBHelper.addNewUser(currentUserId,"Joey",email,password);
+                                            fireBaseDBHelper.addNewUser(currentUserId,nickname,email,password);
                                             dismiss();
                                             getContext().startActivity(new Intent(getOwnerActivity(),MainActivity.class));
                                         }else
@@ -85,7 +90,7 @@ public class SignUpDialog extends Dialog {
                                 });
                     }else
                     {
-                        tv_error.setText("Password does not match");
+                        et_dialog_password_re.setError("Password does not match");
                     }
                 }
             }
