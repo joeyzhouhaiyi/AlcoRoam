@@ -1,6 +1,7 @@
 package com.elec390coen.alcoroam.Activities.Setting;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.preference.PreferenceManager;
@@ -16,6 +17,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.elec390coen.alcoroam.Activities.Main.MainActivity;
+import com.elec390coen.alcoroam.Activities.bluetooth.BluetoothActivity;
 import com.elec390coen.alcoroam.Controllers.FireBaseAuthHelper;
 import com.elec390coen.alcoroam.Controllers.FireBaseDBHelper;
 import com.elec390coen.alcoroam.Models.GPSLocation;
@@ -35,6 +38,7 @@ public class SettingActivity extends AppCompatActivity {
     Switch GPS_switch;
     TextView textViewLat;
     TextView textViewLon;
+    Button btn_bluetooth;
 
 
     Button contactInfoBTN;
@@ -93,6 +97,7 @@ public class SettingActivity extends AppCompatActivity {
 
     }
 
+
     public void openDialog() {
         new InfoDialog(this).show();
 
@@ -135,6 +140,15 @@ public class SettingActivity extends AppCompatActivity {
         dbHelper = new FireBaseDBHelper();
         authHelper = new FireBaseAuthHelper();
         currentUser = authHelper.getCurrentUser();
+        //bluetooth
+        btn_bluetooth = findViewById(R.id.btn_bt);
+
+        btn_bluetooth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SettingActivity.this, BluetoothActivity.class));
+            }
+        });
 
     }
 

@@ -52,7 +52,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.style_activity_main);
         fireBaseDBHelper = new FireBaseDBHelper();
 
-        //lv_readings = findViewById(R.id.lv_reading);
+
+        /*lv_readings = findViewById(R.id.lv_reading);
 
         //debug
         btn_debug = findViewById(R.id.btn_debug);
@@ -102,15 +103,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //bluetooth
-        btn_bluetooth = findViewById(R.id.btn_bt);
 
-        btn_bluetooth.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, BluetoothActivity.class));
-            }
-        });
 
         //logout
         firebaseAuth = FirebaseAuth.getInstance();

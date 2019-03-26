@@ -7,6 +7,15 @@
     android:background="@drawable/login_bg"
     tools:context=".Activities.Main.MainActivity">
 
+    <Button
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@drawable/ic_settings"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="30dp"
+        android:id="@+id/btn_setting"/>
+
     <RelativeLayout
         android:id="@+id/main_l1"
         android:layout_width="wrap_content"
@@ -55,33 +64,15 @@
             android:textSize="15sp"
             android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/btn_setting"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/btn_alco"
-            android:background="@color/transparent"
-            android:text="Setting"
-            android:textColor="@color/app_white"
-            android:textSize="15sp"
-            android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/btn_bt"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/btn_setting"
-            android:background="@color/transparent"
-            android:text="BlueTooth"
-            android:textColor="@color/app_white"
-            android:textSize="15sp"
-            android:textStyle="bold" />
+
+
 
         <Button
             android:id="@+id/btn_debug"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/btn_bt"
+            android:layout_below="@+id/btn_alco"
             android:background="@color/transparent"
             android:text="Debug"
             android:textColor="@color/app_white"
@@ -120,7 +111,6 @@
             />
 
     </RelativeLayout>
-
 
 
 </RelativeLayout>
