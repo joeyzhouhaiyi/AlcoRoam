@@ -11,12 +11,14 @@
     android:layout_height="wrap_content"
     android:id="@+id/st_layer1"
     android:layout_centerHorizontal="true"
-    android:layout_marginTop="40dp"
-    >
+    android:layout_marginTop="40dp">
 
     <EditText
         android:id="@+id/contactName"
         android:hint="Name"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:paddingLeft="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
@@ -31,6 +33,9 @@
         android:inputType="textWebEmailAddress"
         android:layout_below="@+id/contactName"
         android:hint="Email"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:paddingLeft="15dp"
         android:background="@drawable/btn_bg"
         android:layout_marginTop="10dp"
          />
@@ -40,6 +45,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Phone Number"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:paddingLeft="15dp"
         android:inputType="phone"
         android:layout_below="@+id/contactEmail"
         android:background="@drawable/btn_bg"

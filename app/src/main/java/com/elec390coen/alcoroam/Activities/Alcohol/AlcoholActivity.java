@@ -77,9 +77,9 @@ public class AlcoholActivity extends AppCompatActivity {
         myLocation = GPSLocation.getInstance();
         ableToDrive = Double.parseDouble(getString(R.string.driveLimit)); //driving limits
         veryDrunk = Double.parseDouble(getString(R.string.tooDrunk));      // you are too drunk
-        currtest = 950;
+        //currtest = 950;
         saveLocation();
-        testAlcoholLevel(String.valueOf(currtest));
+        //testAlcoholLevel(String.valueOf(currtest));
     }
 
 

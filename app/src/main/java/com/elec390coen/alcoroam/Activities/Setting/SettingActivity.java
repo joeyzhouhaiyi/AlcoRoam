@@ -142,7 +142,6 @@ public class SettingActivity extends AppCompatActivity {
         currentUser = authHelper.getCurrentUser();
         //bluetooth
         btn_bluetooth = findViewById(R.id.btn_bt);
-
         btn_bluetooth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
