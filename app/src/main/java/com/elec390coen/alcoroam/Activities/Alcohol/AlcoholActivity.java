@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.SmsManager;
@@ -16,13 +17,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.elec390coen.alcoroam.Activities.Setting.GPStracker;
+import com.elec390coen.alcoroam.Activities.Setting.SettingActivity;
 import com.elec390coen.alcoroam.Controllers.DeviceManager;
 import com.elec390coen.alcoroam.Controllers.FireBaseAuthHelper;
 import com.elec390coen.alcoroam.Controllers.FireBaseDBHelper;
 import com.elec390coen.alcoroam.Models.CurrentAlcoholSensor;
 import com.elec390coen.alcoroam.Models.GPSLocation;
 import com.elec390coen.alcoroam.Models.TestResult;
+import com.elec390coen.alcoroam.Models.User;
 import com.elec390coen.alcoroam.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,6 +46,7 @@ public class AlcoholActivity extends AppCompatActivity {
     Handler btin;
     ProgressBar pb_alcohol_level;
 
+    User currentUser;
     final int handlerState = 0;
     private BluetoothSocket btSocket = null;
     private StringBuilder recDataString = new StringBuilder();
@@ -52,6 +59,8 @@ public class AlcoholActivity extends AppCompatActivity {
     FireBaseAuthHelper fireBaseAuthHelper;
     GPSLocation myLocation;
 
+    private String contactName;
+    private String contactNumber;
     private double currtest; // current alcohol percentage
     private double ableToDrive;
     private double veryDrunk;     // you are too drunk
@@ -61,12 +70,16 @@ public class AlcoholActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.style_activity_alcohol);
         initUI();
+        //fetchUserFromDB();
+        Intent i = getIntent();
+        contactName = i.getStringExtra("name");
+        contactNumber = i.getStringExtra("number");
         myLocation = GPSLocation.getInstance();
         ableToDrive = Double.parseDouble(getString(R.string.driveLimit)); //driving limits
         veryDrunk = Double.parseDouble(getString(R.string.tooDrunk));      // you are too drunk
         currtest = 950;
         saveLocation();
-        testAlcoholLevel();
+        testAlcoholLevel(String.valueOf(currtest));
     }
 
 
@@ -119,7 +132,7 @@ public class AlcoholActivity extends AppCompatActivity {
                             viewData.setText("Sensor reading = " + String.valueOf(reading / 1000) + "g/L");    //update the textviews with sensor values
                             getMaxData(sensor0);
                             currtest = reading;
-                            testAlcoholLevel();
+                            testAlcoholLevel(sensor0);
                         }
                         recDataString.delete(0, recDataString.length());                    //clear all string data
                     }
@@ -253,7 +266,7 @@ public class AlcoholActivity extends AppCompatActivity {
     }
 
     //Test the alcohol level and perform the corresponding operation
-    public void testAlcoholLevel() {
+    public void testAlcoholLevel(String reading) {
         if (currtest > ableToDrive && currtest < veryDrunk) {
             Intent i = new Intent(getApplicationContext(), PhoneCallPop.class);
             startActivity(i);
@@ -271,11 +284,26 @@ public class AlcoholActivity extends AppCompatActivity {
 
                 }
             }
-            SmsManager.getDefault().sendTextMessage("5142240057", null
-                    , "Hello Joey Please come pick me up at: Longitude:"
+            SmsManager.getDefault().sendTextMessage(contactNumber, null
+                    , "Hello "+contactName + ", My alcohol concentration is at: "+reading+". Please come pick me up at: Longitude:"
                             + myLocation.getLon() + ", Latitude: "
                             + myLocation.getLat() + "!", null, null);
         }
+    }
+
+    public void fetchUserFromDB()
+    {
+        fireBaseDBHelper.getUserRefWithId(fireBaseAuthHelper.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                 currentUser = dataSnapshot.getValue(User.class);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(AlcoholActivity.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
 

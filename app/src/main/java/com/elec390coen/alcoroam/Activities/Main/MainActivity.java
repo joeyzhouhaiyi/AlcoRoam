@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     Button btn_debug;
     Button btn_display;
     TextView tv_welcome;
-
+    User thisUser;
     private FirebaseAuth firebaseAuth;
     private FireBaseDBHelper fireBaseDBHelper;
     ListView lv_readings;
@@ -89,7 +89,10 @@ public class MainActivity extends AppCompatActivity {
         btn_alcohol.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, AlcoholActivity.class));
+                Intent i = new Intent(MainActivity.this, AlcoholActivity.class);
+                i.putExtra("name",thisUser.getEmergencyContactName());
+                i.putExtra("number",thisUser.getEmergencyContactNumber());
+                startActivity(i);
             }
         });
 
@@ -122,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
         fireBaseDBHelper.getUserRefWithId(firebaseAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User thisUser = dataSnapshot.getValue(User.class);
+                thisUser = dataSnapshot.getValue(User.class);
                 tv_welcome.setText("Welcome, "+thisUser.getName() +"!");
             }
 
