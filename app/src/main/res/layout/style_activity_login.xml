@@ -57,6 +57,8 @@
                         android:layout_height="40dp"
                         android:layout_marginTop="5dp"
                         android:background="@drawable/et_bg"
+                        android:drawableLeft="@drawable/ic_user"
+                        android:textColor="@color/app_white"
                         android:paddingLeft="15dp"
                         android:paddingRight="15dp"
                         android:textSize="15sp"/>
@@ -81,6 +83,7 @@
                         android:layout_height="40dp"
                         android:layout_marginTop="5dp"
                         android:background="@drawable/et_bg"
+                        android:drawableLeft="@drawable/ic_pass"
                         android:paddingLeft="15dp"
                         android:paddingRight="15dp"
                         android:textSize="15sp"
@@ -134,13 +137,14 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/layer2"
                 android:layout_marginTop="60dp"
-                android:background="@color/transparent"
+                android:background="@drawable/btn_bg"
                 android:text="Sign in"
                 android:layout_centerHorizontal="true"
                 android:textColor="@color/app_white"
                 android:textAllCaps="false"
                 android:textSize="20sp"
-
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
                 />
         </RelativeLayout>
 
