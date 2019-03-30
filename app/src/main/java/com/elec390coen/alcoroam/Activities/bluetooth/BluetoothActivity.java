@@ -21,7 +21,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.elec390coen.alcoroam.Activities.Alcohol.BluetoothServices;
 import com.elec390coen.alcoroam.Controllers.BluetoothHelper;
+import com.elec390coen.alcoroam.Controllers.DeviceManager;
+import com.elec390coen.alcoroam.Models.CurrentAlcoholSensor;
 import com.elec390coen.alcoroam.R;
 
 import java.util.ArrayList;
@@ -89,8 +92,12 @@ public class BluetoothActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 BluetoothDevice selectedDevice = (BluetoothDevice)parent.getItemAtPosition(position);
-                bluetoothHelper.stopSearchingForDevice();
-                new ConnectBT(BluetoothActivity.this,selectedDevice).execute();
+                Intent startServiceIntent = new Intent(BluetoothActivity.this,BluetoothServices.class);
+                startServiceIntent.putExtra("deviceAddress",selectedDevice.getAddress());
+                startService(startServiceIntent);
+                //bluetoothHelper.stopSearchingForDevice();
+                //DeviceManager.setCurrentAlcoholSensor(new CurrentAlcoholSensor(selectedDevice));
+                //new ConnectBT(BluetoothActivity.this,selectedDevice).execute();
             }
         });
         //set current device name and initialize checkbox

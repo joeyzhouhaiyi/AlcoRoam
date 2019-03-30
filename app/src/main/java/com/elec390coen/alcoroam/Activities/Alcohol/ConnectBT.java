@@ -1,4 +1,4 @@
-package com.elec390coen.alcoroam.Activities.bluetooth;
+package com.elec390coen.alcoroam.Activities.Alcohol;
 
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
@@ -12,6 +12,8 @@ import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 import com.elec390coen.alcoroam.Activities.Alcohol.AlcoholActivity;
+import com.elec390coen.alcoroam.Activities.bluetooth.ChooseDeviceDialog;
+import com.elec390coen.alcoroam.Controllers.DeviceManager;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -77,7 +79,9 @@ public class ConnectBT extends AsyncTask<Void, Void, Void>  // UI thread
             SharedPreferences.Editor e = p.edit();
             e.putString("current_bluetooth_address",selectedDevice.getAddress());
             e.apply();
-            new ChooseDeviceDialog(context,selectedDevice).show();
+            //new ChooseDeviceDialog(context,selectedDevice).show();
+            DeviceManager.setBtSocket(btSocket);
+
         }
         progress.dismiss();
     }

@@ -66,18 +66,18 @@ public class PhoneCallPop extends Activity {
         lv_taxi = findViewById (R.id.lv_taxi);
         taxinumberList = new ArrayList<> ();
 
-        taxinumberList.add ("OnCads Montreal\n 5144001005");
-        taxinumberList.add ("Taxi Boonjour Montreal\n 5143708777");
-        taxinumberList.add("Taxi Dianmond\n 5142736331");
-        taxinumberList.add("Atlas Taxi\n 5144858585");
-        taxinumberList.add("Taxi Champlian\n 5142711111");
-        taxinumberList.add("Taxi Coop\n 5147259885");
-        taxinumberList.add("Taxi Classe Affaires Montreal\n 5145750220");
-        taxinumberList.add("Hypra Taxi\n 5143123003");
-        taxinumberList.add("Angrignon Taxi Inc\n 5147621000");
-        taxinumberList.add("Westmount Taxi Ltee\n 5144842604");
-        taxinumberList.add("Amical Taxi\n 514271252");
-        taxinumberList.add("Taxi Pontiac Hemlock\n 5147668294");
+        taxinumberList.add ("OnCads Montreal\n5144001005");
+        taxinumberList.add ("Taxi Boonjour Montreal\n5143708777");
+        taxinumberList.add("Taxi Dianmond\n5142736331");
+        taxinumberList.add("Atlas Taxi\n5144858585");
+        taxinumberList.add("Taxi Champlian\n5142711111");
+        taxinumberList.add("Taxi Coop\n5147259885");
+        taxinumberList.add("Taxi Classe Affaires Montreal\n5145750220");
+        taxinumberList.add("Hypra Taxi\n5143123003");
+        taxinumberList.add("Angrignon Taxi Inc\n5147621000");
+        taxinumberList.add("Westmount Taxi Ltee\n5144842604");
+        taxinumberList.add("Amical Taxi\n514271252");
+        taxinumberList.add("Taxi Pontiac Hemlock\n5147668294");
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<> (PhoneCallPop.this,R.layout.item_listview_taxi, taxinumberList);
         lv_taxi.setAdapter (arrayAdapter);
@@ -85,7 +85,7 @@ public class PhoneCallPop extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = (String) parent.getItemAtPosition(position);
-                String[] strings = selectedItem.split(" ");
+                String[] strings = selectedItem.split("\n");
                 String number = strings[1];
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
 

@@ -3,25 +3,32 @@ package com.elec390coen.alcoroam.Activities.Alcohol;
 import android.Manifest;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.elec390coen.alcoroam.Activities.Setting.GPStracker;
-import com.elec390coen.alcoroam.Activities.Setting.SettingActivity;
+import com.elec390coen.alcoroam.Activities.bluetooth.BluetoothActivity;
+import com.elec390coen.alcoroam.Activities.bluetooth.ConnectedThread;
 import com.elec390coen.alcoroam.Controllers.DeviceManager;
 import com.elec390coen.alcoroam.Controllers.FireBaseAuthHelper;
 import com.elec390coen.alcoroam.Controllers.FireBaseDBHelper;
-import com.elec390coen.alcoroam.Models.CurrentAlcoholSensor;
 import com.elec390coen.alcoroam.Models.GPSLocation;
 import com.elec390coen.alcoroam.Models.TestResult;
 import com.elec390coen.alcoroam.Models.User;
@@ -31,8 +38,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -45,8 +50,9 @@ public class AlcoholActivity extends AppCompatActivity {
     TextView tv_risk;
     Handler btin;
     ProgressBar pb_alcohol_level;
-
     User currentUser;
+    Button btn_refresh_connection;
+
     final int handlerState = 0;
     private BluetoothSocket btSocket = null;
     private StringBuilder recDataString = new StringBuilder();
@@ -77,43 +83,27 @@ public class AlcoholActivity extends AppCompatActivity {
         myLocation = GPSLocation.getInstance();
         ableToDrive = Double.parseDouble(getString(R.string.driveLimit)); //driving limits
         veryDrunk = Double.parseDouble(getString(R.string.tooDrunk));      // you are too drunk
-        //currtest = 950;
+        //currtest = 850;
         saveLocation();
         //testAlcoholLevel(String.valueOf(currtest));
+        btn_refresh_connection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences pref = getSharedPreferences("BT_NAME", 0);
+                String bt_address = pref.getString("lastConnectedBTAddress","00:18:E4:34:DD:3F");
+                Intent startServiceIntent = new Intent(AlcoholActivity.this,BluetoothServices.class);
+                startServiceIntent.putExtra("deviceAddress",bt_address);
+                startService(startServiceIntent);
+            }
+        });
+        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter("messageIntent"));
     }
 
 
     @Override
     public void onResume() {
         super.onResume();
-
-        CurrentAlcoholSensor currentAlcoholSensor = DeviceManager.getCurrentAlcoholSensor();
-
-        if (currentAlcoholSensor != null) {
-            BluetoothDevice device = currentAlcoholSensor.getDevice();
-            tv_connection_status.setText("Connected to:\n" + device.getName() + " - " + device.getAddress());
-            try {
-                btSocket = createBluetoothSocket(device);
-            } catch (IOException e) {
-                Toast.makeText(getBaseContext(), "Socket creation failed", Toast.LENGTH_LONG).show();
-            }
-            // Establish the Bluetooth socket connection.
-            try {
-                btSocket = (BluetoothSocket) device.getClass().getMethod("createRfcommSocket", new Class[]{int.class}).invoke(device, 1);
-                btSocket.connect();
-            } catch (Exception e) {
-
-            }
-            mConnectedThread = new ConnectedThread(btSocket);
-            mConnectedThread.start();
-
-            //I send a character when resuming.beginning transmission to check device is connected
-            //If it is not an exception will be thrown in the write method and finish() will be called
-            //mConnectedThread.write("x");
-        } else {
-            tv_connection_status.setText("Device not connected");
-        }
-
+        /*
         btin = new Handler() {
             public void handleMessage(android.os.Message msg) {
                 if (msg.what == handlerState) {
@@ -138,7 +128,7 @@ public class AlcoholActivity extends AppCompatActivity {
                     }
                 }
             }
-        };
+        };*/
     }
 
     //get the max result every 10s and save it to database
@@ -169,69 +159,13 @@ public class AlcoholActivity extends AppCompatActivity {
         return currentTimeStamp;
     }
 
-    private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {
-
-        return device.createRfcommSocketToServiceRecord(BTUUID);
-    }
-
-
-    public class ConnectedThread extends Thread {
-        private final InputStream mmInStream;
-        private final OutputStream mmOutStream;
-
-        //creation of the connect thread
-        public ConnectedThread(BluetoothSocket socket) {
-            InputStream tmpIn = null;
-            OutputStream tmpOut = null;
-
-            try {
-                //Create I/O streams for connection
-                tmpIn = socket.getInputStream();
-                tmpOut = socket.getOutputStream();
-            } catch (IOException e) {
-            }
-
-            mmInStream = tmpIn;
-            mmOutStream = tmpOut;
-        }
-
-
-        public void run() {
-            byte[] buffer = new byte[256];
-            int bytes;
-
-            // Keep looping to listen for received messages
-            while (true) {
-                try {
-                    bytes = mmInStream.read(buffer);            //read bytes from input buffer
-                    String readMessage = new String(buffer, 0, bytes);
-                    // Send the obtained bytes to the UI Activity via handler
-                    btin.obtainMessage(handlerState, bytes, -1, readMessage).sendToTarget();
-                } catch (IOException e) {
-                    break;
-                }
-            }
-        }
-        /*
-        //write method
-        public void write(String input) {
-            byte[] msgBuffer = input.getBytes();           //converts entered String into bytes
-            try {
-                mmOutStream.write(msgBuffer);                //write bytes over BT connection via outstream
-            } catch (IOException e) {
-                //if you cannot write, close the application
-                Toast.makeText(getBaseContext(), "Connection Failure", Toast.LENGTH_LONG).show();
-                finish();
-            }
-        }*/
-    }
-
 
     private void initUI() {
         viewData = findViewById(R.id.tv_response);
         tv_risk = findViewById(R.id.tv_riskLevel);
         pb_alcohol_level = findViewById(R.id.pb_alcohol_level);
         tv_connection_status = findViewById(R.id.tv_connection_status);
+        btn_refresh_connection = findViewById(R.id.btn_refresh_connection);
         fireBaseDBHelper = new FireBaseDBHelper();
         fireBaseAuthHelper = new FireBaseAuthHelper();
     }
@@ -291,20 +225,14 @@ public class AlcoholActivity extends AppCompatActivity {
         }
     }
 
-    public void fetchUserFromDB()
-    {
-        fireBaseDBHelper.getUserRefWithId(fireBaseAuthHelper.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                 currentUser = dataSnapshot.getValue(User.class);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(AlcoholActivity.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
+    BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String receivedMsg = intent.getStringExtra("receivedMessage");
+            Log.d("AlcoholActivity",receivedMsg);
+            viewData.setText(receivedMsg);
+        }
+    };
 }
 
 
