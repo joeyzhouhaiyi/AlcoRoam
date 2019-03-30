@@ -12,6 +12,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,7 +30,12 @@ import com.elec390coen.alcoroam.Models.User;
 import com.elec390coen.alcoroam.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,12 +46,23 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+
+
 public class AlcoholActivity extends AppCompatActivity {
     TextView viewData;
     TextView tv_connection_status;
     TextView tv_risk;
     Handler btin;
     ProgressBar pb_alcohol_level;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    //DatabaseReference reference = database.getReference("chartTable");
+    Button record;
+    GraphView readingPlot;
+    LineGraphSeries series;
+
+
+
+
 
     User currentUser;
     final int handlerState = 0;
@@ -65,11 +83,41 @@ public class AlcoholActivity extends AppCompatActivity {
     private double ableToDrive;
     private double veryDrunk;     // you are too drunk
 
+    //graph plot
+
+
+
+
+
+
+
+
+
+
+
+
+    // end graph plot
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
+
         setContentView(R.layout.style_activity_alcohol);
         initUI();
+
+
+        record=findViewById(R.id.recordAlco);
+        readingPlot = (GraphView) findViewById(R.id.alcoView);
+        series = new LineGraphSeries();
+        readingPlot.addSeries(series);
+        database = FirebaseDatabase.getInstance();
+        //reference = database.getReference("chartTable");
+        setListeners();
         //fetchUserFromDB();
         Intent i = getIntent();
         contactName = i.getStringExtra("name");
@@ -80,6 +128,39 @@ public class AlcoholActivity extends AppCompatActivity {
         //currtest = 950;
         saveLocation();
         //testAlcoholLevel(String.valueOf(currtest));
+    }
+
+    private void setListeners() {
+        record.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //String id = reference.push().getKey();
+
+
+                database.getReference("Users").child(fireBaseAuthHelper.getCurrentUser().getUid()).child("AlcoholReadings").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        int index = 0;
+                        DataPoint[] dp = new DataPoint[(int)dataSnapshot.getChildrenCount()];
+                        for (DataSnapshot readingSnapshot: dataSnapshot.getChildren()) {
+                            TestResult t = readingSnapshot.getValue(TestResult.class);
+                            //resultList.add(t);
+                            int x = index;
+                            double y = Double.parseDouble(t.getReading());
+
+                            dp[index] = new DataPoint(x,y);
+                            index++;
+                        }
+                        series.resetData(dp);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        });
     }
 
 
