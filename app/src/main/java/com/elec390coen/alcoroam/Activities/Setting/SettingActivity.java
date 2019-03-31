@@ -116,9 +116,9 @@ public class SettingActivity extends AppCompatActivity {
                     String contactName = thisUser.getEmergencyContactName();
                     String contactEmail = thisUser.getEmergencyContactEmail();
                     String contactPhone = thisUser.getEmergencyContactNumber();
-                    textViewName.setText(contactName);
-                    textViewEmail.setText(contactEmail);
-                    textViewPhone.setText(contactPhone);
+                    textViewName.setText("  "+contactName);
+                    textViewEmail.setText("  "+contactEmail);
+                    textViewPhone.setText("  "+contactPhone);
                 }
 
             }

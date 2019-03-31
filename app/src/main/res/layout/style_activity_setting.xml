@@ -13,14 +13,19 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/btn_bt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/app_end"
-        android:text="BlueTooth"
+        android:background="@drawable/btn_bg"
+        android:text="BlueTooth Setup"
         android:textColor="@color/app_white"
         android:textSize="15sp"
         android:textStyle="bold"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="48dp"
-        tools:ignore="MissingConstraints" />
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:layout_marginBottom="40dp"
+        android:textAllCaps="false"
+        android:drawableLeft="@drawable/ic_bluetooth"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
     <TextView
         android:id="@+id/GPS_lonView"
@@ -35,10 +40,10 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.516"
+        app:layout_constraintHorizontal_bias="0.627"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.16" />
+        app:layout_constraintVertical_bias="0.723" />
 
     <TextView
         android:id="@+id/GPS_latView"
@@ -53,83 +58,99 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.627"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.226" />
+        app:layout_constraintVertical_bias="0.781" />
 
-    <TextView
-        android:id="@+id/txtVName"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="Enmergency Contact Name"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.705" />
-
-    <TextView
-        android:id="@+id/txtVPhone"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="Enmergency Contact Phone"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.557" />
-
-    <TextView
-        android:id="@+id/txtVEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="Enmergency Contact Email"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.637" />
-
-
-    <Button
-        android:id="@+id/contactInfo_btn"
-        style="@style/Base.Widget.AppCompat.Button.Colored"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginStart="8dp"
+        android:layout_height="wrap_content">
 
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="32dp"
-        android:text="Start Setting"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.846" />
+        <TextView
+            android:id="@+id/ec_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/emergency_contact"
+            android:textSize="36sp"
+            android:textColor="@color/app_white"
+            android:fontFamily="cursive"
+            android:textStyle="bold"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="40dp"/>
+
+        <TextView
+            android:id="@+id/txtVName"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:paddingLeft="16dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="8dp"
+            android:layout_below="@+id/ec_title"
+            android:background="@drawable/et_bg"
+            android:drawableLeft="@drawable/ic_user"
+            android:text="  Contact Name"
+            android:textColor="@color/app_white"
+            android:textSize="24sp"
+            android:layout_centerHorizontal="true"
+            />
+
+
+        <TextView
+            android:id="@+id/txtVEmail"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:paddingLeft="16dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="8dp"
+            android:layout_below="@+id/txtVName"
+            android:background="@drawable/et_bg"
+            android:drawableLeft="@drawable/ic_email"
+            android:text="  Contact Email"
+            android:textColor="@color/app_white"
+            android:textSize="24sp"
+            android:layout_centerHorizontal="true"/>
+
+        <TextView
+            android:id="@+id/txtVPhone"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:paddingLeft="16dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="8dp"
+            android:layout_below="@+id/txtVEmail"
+            android:background="@drawable/et_bg"
+            android:drawableLeft="@drawable/ic_phone"
+            android:text="  Contact Phone"
+            android:textColor="@color/app_white"
+            android:textSize="24sp"
+            android:layout_centerHorizontal="true"/>
+
+        <Button
+            android:id="@+id/contactInfo_btn"
+            style="@style/Base.Widget.AppCompat.Button.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtVPhone"
+            android:background="@drawable/btn_bg"
+            android:layout_centerHorizontal="true"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:drawableLeft="@drawable/ic_edit"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="32dp"
+            android:text="Edit Info"/>
+    </RelativeLayout>
+
 
     <Switch
         android:id="@+id/GPSswitch"
@@ -143,8 +164,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.778"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.079" />
+        app:layout_constraintVertical_bias="0.647" />
 </android.support.constraint.ConstraintLayout>

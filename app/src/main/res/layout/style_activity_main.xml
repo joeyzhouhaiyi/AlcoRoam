@@ -89,7 +89,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="20dp"
         android:layout_marginBottom="40dp"
-        android:text="welcome,blablabla"
+        android:text="welcome,"
         android:textSize="16sp"/>
 
     <RelativeLayout

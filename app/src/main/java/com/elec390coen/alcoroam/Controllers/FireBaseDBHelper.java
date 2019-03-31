@@ -88,7 +88,7 @@ public class FireBaseDBHelper {
     {
         DatabaseReference ref = database.getReference("hrReading");
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy-hh-mm-ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM hh:mm:ss");
         String currentTimeStamp = simpleDateFormat.format(new Date());
         String type = "heart";
         TestResult tr = new TestResult(currentTimeStamp,reading,type);
