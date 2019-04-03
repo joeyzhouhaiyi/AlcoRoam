@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
@@ -33,6 +34,7 @@ public class SignUpDialog extends Dialog {
     private FireBaseAuthHelper fireBaseAuthHelper;
     private FireBaseDBHelper fireBaseDBHelper;
     private TextView tv_error;
+    private Context mContext;
 
     public SignUpDialog(Context context)
     {
@@ -41,6 +43,7 @@ public class SignUpDialog extends Dialog {
         {
             setOwnerActivity((LoginActivity)context );
         }
+        mContext = context;
     }
 
     @Override
@@ -80,6 +83,10 @@ public class SignUpDialog extends Dialog {
                                             FirebaseUser currentUser = fireBaseAuthHelper.getCurrentUser();
                                             String currentUserId = currentUser.getUid();
                                             fireBaseDBHelper.addNewUser(currentUserId,nickname,email,password);
+                                            SharedPreferences sharedPreferences = mContext.getSharedPreferences("LoginInfo", 0);
+                                            SharedPreferences.Editor ed = sharedPreferences.edit();
+                                            ed.putBoolean("playTutorial",true);
+                                            ed.apply();
                                             dismiss();
                                             getContext().startActivity(new Intent(getOwnerActivity(),MainActivity.class));
                                         }else
@@ -108,5 +115,13 @@ public class SignUpDialog extends Dialog {
         tv_error.setText("");
         fireBaseAuthHelper = new FireBaseAuthHelper();
         fireBaseDBHelper = new FireBaseDBHelper();
+    }
+
+    public void SetToNewUser()
+    {
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences("LoginInfo", 0);
+        SharedPreferences.Editor ed = sharedPreferences.edit();
+        ed.putBoolean("newUser",true);
+        ed.apply();
     }
 }

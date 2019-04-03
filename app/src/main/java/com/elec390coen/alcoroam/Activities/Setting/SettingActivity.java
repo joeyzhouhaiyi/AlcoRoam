@@ -3,6 +3,7 @@ package com.elec390coen.alcoroam.Activities.Setting;
 import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.location.Location;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -24,6 +25,8 @@ import com.elec390coen.alcoroam.Controllers.FireBaseDBHelper;
 import com.elec390coen.alcoroam.Models.GPSLocation;
 import com.elec390coen.alcoroam.Models.User;
 import com.elec390coen.alcoroam.R;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -94,6 +97,22 @@ public class SettingActivity extends AppCompatActivity {
           }
         });
 
+        if(playTutorial())
+        {
+            Button bt = new Button(this);
+            bt.setBackgroundColor(Color.TRANSPARENT);
+            bt.setText("");
+            bt.setEnabled(false);
+            ShowcaseView showcaseView = new ShowcaseView.Builder(this)
+                    .setTarget(new ViewTarget(R.id.btn_bt, this))
+                    .setContentTitle("Setup Bluetooth")
+                    .setContentText("Click here to setup your bluetooth connection.")
+                    .withHoloShowcase()
+                    .replaceEndButton(bt)
+                    .setStyle(R.style.ShowcaseView_custom)
+                    .build();
+            showcaseView.forceTextPosition(ShowcaseView.ABOVE_SHOWCASE);
+        }
 
     }
 
@@ -149,6 +168,13 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private boolean playTutorial()
+    {
+        SharedPreferences preferences = getSharedPreferences("LoginInfo",0);
+        boolean play = preferences.getBoolean("playTutorial",false);
+        return play;
     }
 
 }

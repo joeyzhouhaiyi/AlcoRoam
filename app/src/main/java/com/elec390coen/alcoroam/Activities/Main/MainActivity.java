@@ -1,6 +1,8 @@
 package com.elec390coen.alcoroam.Activities.Main;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,6 +22,8 @@ import com.elec390coen.alcoroam.Controllers.FireBaseDBHelper;
 import com.elec390coen.alcoroam.Models.TestResult;
 import com.elec390coen.alcoroam.Models.User;
 import com.elec390coen.alcoroam.R;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -136,16 +140,29 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        if(playTutorial())
+        {
+            Button bt = new Button(this);
+            bt.setBackgroundColor(Color.TRANSPARENT);
+            bt.setText("");
+            bt.setEnabled(false);
+            new ShowcaseView.Builder(this)
+                    .setTarget(new ViewTarget(R.id.btn_setting, this))
+                    .setContentTitle("Welcome to AlcoRoam!")
+                    .setContentText("Please click on the setting button as I will show you how to set up your devices.")
+                    .withHoloShowcase()
+                    .replaceEndButton(bt)
+                    .setStyle(R.style.ShowcaseView_custom)
+                    .build();
+        }
+
     }
 
-    public void processData(List<TestResult> resultList)
+    private boolean playTutorial()
     {
-        List<String> readableResults = new ArrayList<>();
-        for(TestResult t : resultList)
-        {
-            readableResults.add(t.getReading()+"mg/L at "+ t.getTime());
-        }
-        lv_readings.setAdapter(new ArrayAdapter<String>(MainActivity.this,android.R.layout.simple_list_item_1,readableResults));
+        SharedPreferences preferences = getSharedPreferences("LoginInfo",0);
+        boolean play = preferences.getBoolean("playTutorial",false);
+        return play;
     }
 
 }

@@ -22,6 +22,7 @@ public class BluetoothHelper {
     {
         this.context = context;
         BTAdapter = BluetoothAdapter.getDefaultAdapter();
+        BTAdapter.enable();
         if(BTAdapter == null)
         {
             Toast.makeText(context,"Bluetooth is not supported",Toast.LENGTH_LONG).show();

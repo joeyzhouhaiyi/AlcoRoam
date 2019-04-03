@@ -7,6 +7,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,6 +28,8 @@ import com.elec390coen.alcoroam.Controllers.BluetoothHelper;
 import com.elec390coen.alcoroam.Controllers.DeviceManager;
 import com.elec390coen.alcoroam.Models.CurrentAlcoholSensor;
 import com.elec390coen.alcoroam.R;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 import java.util.ArrayList;
 import java.util.Set;
@@ -61,6 +65,8 @@ public class BluetoothActivity extends AppCompatActivity {
                 }else {
                     bluetoothHelper.stopSearchingForDevice();
                 }
+                SharedPreferences preferences = getSharedPreferences("LoginInfo",0);
+                preferences.edit().putBoolean("playTutorial",false).apply();
             }
         });
         //implement enable checkbox
@@ -77,6 +83,30 @@ public class BluetoothActivity extends AppCompatActivity {
                 }
             }
         });
+        if(playTutorial())
+        {
+            Button bt = new Button(this);
+            bt.setBackgroundColor(Color.TRANSPARENT);
+            bt.setText("");
+            bt.setEnabled(false);
+            ShowcaseView showcaseView = new ShowcaseView.Builder(this)
+                    .setTarget(new ViewTarget(R.id.btn_search, this))
+                    .setContentTitle("Select Device")
+                    .setContentText("Press SEARCH and select \"HC-05\" to establish connection.")
+                    .withHoloShowcase()
+                    .replaceEndButton(bt)
+                    .setStyle(R.style.ShowcaseView_custom)
+                    .build();
+            showcaseView.forceTextPosition(ShowcaseView.ABOVE_SHOWCASE);
+        }
+
+    }
+
+    private boolean playTutorial()
+    {
+        SharedPreferences preferences = getSharedPreferences("LoginInfo",0);
+        boolean play = preferences.getBoolean("playTutorial",false);
+        return play;
     }
 
     private void initView()

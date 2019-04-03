@@ -22,4 +22,5 @@
     <string name="tooDrunk">900</string>
     <string name="nickname">Nickname</string>
     <string name="emergency_contact">Emergency Contact</string>
+    <string name="empty"></string>
 </resources>
