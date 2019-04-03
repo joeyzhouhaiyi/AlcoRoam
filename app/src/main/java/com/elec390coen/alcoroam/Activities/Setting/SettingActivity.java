@@ -86,7 +86,9 @@ public class SettingActivity extends AppCompatActivity {
 
                 }
                 else {
-                    Toast.makeText(SettingActivity.this, "GPS Deactivated", Toast.LENGTH_SHORT).show();
+                    textViewLat.setText(null);
+                    textViewLon.setText(null);
+                    Toast.makeText(SettingActivity.this, "GPS Reading Clear", Toast.LENGTH_SHORT).show();
                 }
             }
         });
