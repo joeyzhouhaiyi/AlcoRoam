@@ -42,7 +42,7 @@ public class SettingActivity extends AppCompatActivity {
     TextView textViewLat;
     TextView textViewLon;
     Button btn_bluetooth;
-
+    ShowcaseView showcaseView;
 
     Button contactInfoBTN;
 
@@ -97,25 +97,31 @@ public class SettingActivity extends AppCompatActivity {
           }
         });
 
+
+
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         if(playTutorial())
         {
             Button bt = new Button(this);
             bt.setBackgroundColor(Color.TRANSPARENT);
             bt.setText("");
             bt.setEnabled(false);
-            ShowcaseView showcaseView = new ShowcaseView.Builder(this)
+            showcaseView = new ShowcaseView.Builder(this)
                     .setTarget(new ViewTarget(R.id.btn_bt, this))
                     .setContentTitle("Setup Bluetooth")
                     .setContentText("Click here to setup your bluetooth connection.")
                     .withHoloShowcase()
-                    .replaceEndButton(bt)
                     .setStyle(R.style.ShowcaseView_custom)
                     .build();
             showcaseView.forceTextPosition(ShowcaseView.ABOVE_SHOWCASE);
+            showcaseView.hideButton();
         }
-
     }
-
 
     public void openDialog() {
         new InfoDialog(this).show();
@@ -164,6 +170,7 @@ public class SettingActivity extends AppCompatActivity {
         btn_bluetooth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showcaseView.hide();
                 startActivity(new Intent(SettingActivity.this, BluetoothActivity.class));
             }
         });

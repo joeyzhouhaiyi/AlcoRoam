@@ -17,7 +17,7 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:id="@+id/app_icon"
-            android:src="@drawable/ic_temp"
+            android:src="@drawable/ic_beer"
             android:scaleType="fitCenter"/>
         <RelativeLayout
             android:layout_width="wrap_content"

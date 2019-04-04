@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,7 +17,13 @@ import android.view.WindowManager;
 import android.widget.ListView;
 import android.content.Intent;
 
+import com.elec390coen.alcoroam.Controllers.FireBaseAuthHelper;
+import com.elec390coen.alcoroam.Controllers.FireBaseDBHelper;
+import com.elec390coen.alcoroam.Models.User;
 import com.elec390coen.alcoroam.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +31,9 @@ import java.util.List;
 public class PhoneCallPop extends Activity {
 
     Button homeBTN;
-
+    String phoneNumber;
+    FireBaseDBHelper fireBaseDBHelper;
+    FireBaseAuthHelper fireBaseAuthHelper;
     ListView lv_taxi;
     List<String> taxinumberList;
     private static final int PERMISSION_REQUEST_CODE = 1;
@@ -33,13 +42,26 @@ public class PhoneCallPop extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.style_activity_pop);
+        fireBaseDBHelper = new FireBaseDBHelper();
+        fireBaseAuthHelper = new FireBaseAuthHelper();
+        fireBaseDBHelper.getUserRefWithId(fireBaseAuthHelper.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User thisUser = dataSnapshot.getValue(User.class);
+                phoneNumber = thisUser.getEmergencyContactNumber();
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
+            }
+        });
         homeBTN = findViewById(R.id.btn_home);
 
         homeBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String number = "5142240057";
+
+                String number = phoneNumber;
                 Intent intent = new Intent(Intent.ACTION_CALL);
                 intent.setData(Uri.parse("tel:" +number));
                 startActivity(intent);
@@ -54,7 +76,7 @@ public class PhoneCallPop extends Activity {
 
         int width = dm.widthPixels;
         int height = dm.heightPixels;
-        getWindow().setLayout((int)(width*.9), (int)(height*.9));
+        //getWindow().setLayout((int)(width*.8), (int)(height*.8));
 
         WindowManager.LayoutParams params = getWindow().getAttributes();
         params.gravity = Gravity.CENTER;

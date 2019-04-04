@@ -30,12 +30,12 @@
     <style name="ShowcaseView_custom" parent="ShowcaseView.Light">
         <item name="sv_titleTextAppearance">@color/app_orange</item>
         <item name="sv_detailTextAppearance">@color/app_black</item>
-        <item name="sv_backgroundColor">#D2f9f9f9</item>
+        <item name="sv_backgroundColor">#D2000000</item>
         <item name="sv_buttonText">@string/empty</item>
     </style>
 
     <style name="TextAppearance.ShowcaseView.Detail" parent="android:style/TextAppearance">
-        <item name="android:textColor">#000000</item>
+        <item name="android:textColor">#FFFFFF</item>
         <item name="android:textSize">20sp</item>
     </style>
 

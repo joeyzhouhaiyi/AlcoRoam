@@ -113,11 +113,13 @@ public class AlcoholActivity extends AppCompatActivity {
                         counter=0;
                         pb_alcohol_level.setProgress((int) maxReading / 10);
                         setRiskLevel(maxReading);
-                        viewData.setText("Sensor reading = " + String.valueOf(maxReading / 1000) + "g/L");    //update the textviews with sensor values
+                        viewData.setText(String.valueOf(maxReading / 1000) + "g/L");    //update the textviews with sensor values
+                        currtest = maxReading;
                         maxReading=0;
                         UpdateGraph();
+                        testAlcoholLevel();
                     }
-                }, 5000);
+                }, 10000);
                 ll.setVisibility(View.VISIBLE);
                 Animation animFadeIn = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.mytransition);
                 ll.startAnimation(animFadeIn);
@@ -143,9 +145,10 @@ public class AlcoholActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 int index = 0;
                 DataPoint[] dp = new DataPoint[(int)dataSnapshot.getChildrenCount()];
+                results.clear();
                 for (DataSnapshot readingSnapshot: dataSnapshot.getChildren()) {
                     TestResult t = readingSnapshot.getValue(TestResult.class);
-                    //resultList.add(t);
+                    results.add(t);
                     String time = t.getTime();
                     SimpleDateFormat formater = new SimpleDateFormat("dd/MM hh:mm:ss");
                     try {
@@ -171,7 +174,7 @@ public class AlcoholActivity extends AppCompatActivity {
 
 
     private String getCurrentTime() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM hh:mm:ss");
         String currentTimeStamp = simpleDateFormat.format(new Date());
         return currentTimeStamp;
     }
@@ -188,22 +191,9 @@ public class AlcoholActivity extends AppCompatActivity {
         readingPlot = findViewById(R.id.alcoView);
         series = new LineGraphSeries();
         readingPlot.addSeries(series);
-//        readingPlot.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter(){
-//            @Override
-//            public String formatLabel(double value, boolean isValueX) {
-//                if(isValueX)
-//                {
-//                    return
-//                }else
-//                {
-//                    return super.formatLabel(value, isValueX);
-//                }
-//
-//            }
-//        });
         readingPlot.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this,new SimpleDateFormat("dd/MM\nhh:mm:ss")));
-        readingPlot.getGridLabelRenderer().setNumHorizontalLabels(5);
-        readingPlot.getGridLabelRenderer().setHumanRounding(false);
+        readingPlot.getGridLabelRenderer().setNumHorizontalLabels(4);
+        readingPlot.getGridLabelRenderer().setHumanRounding(true);
     }
 
     public void setRiskLevel(double reading) {
@@ -289,11 +279,14 @@ public class AlcoholActivity extends AppCompatActivity {
             if(testButtonPressed) {
                 String receivedMsg = intent.getStringExtra("receivedMessage");
                 Log.d("AlcoholActivity", receivedMsg);
+
                 recDataString.append(receivedMsg);
                 int endOfLineIndex = recDataString.indexOf("~");                    // determine the end-of-line
                 if (endOfLineIndex > 0) {                                           // make sure there data before ~
                     int AlcoholReadingStartingPointIndex = recDataString.indexOf("#");
-                    String alcoholReading = recDataString.substring(AlcoholReadingStartingPointIndex, endOfLineIndex);    // extract string
+                    String alcoholReading="";
+                    if(AlcoholReadingStartingPointIndex>=0)
+                    alcoholReading = recDataString.substring(AlcoholReadingStartingPointIndex, endOfLineIndex);    // extract string
                     int dataLength = alcoholReading.length();                          //get length of data received
                     if (alcoholReading.charAt(0) == '#')                             //if it starts with # we know it is what we are looking for
                     {
@@ -301,7 +294,6 @@ public class AlcoholActivity extends AppCompatActivity {
                         double reading = Double.parseDouble(alcoholReadingInString);
                         getMaxData(alcoholReadingInString);
                         currtest = reading;
-                        testAlcoholLevel();
                     }
                     recDataString.delete(0, recDataString.length());                    //clear all string data
                 }

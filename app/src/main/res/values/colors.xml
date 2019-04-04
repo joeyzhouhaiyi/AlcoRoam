@@ -10,8 +10,9 @@
     <color name="btn_green">#2db94e</color>
     <color name="app_red">#FF0000</color>
     <color name="app_blue">#0f8ae9</color>
-    <color name="app_start">#19AA8B</color>
-    <color name="app_end">#23A7D8</color>
+    <color name="app_start">#6fbbee</color>
+    <color name="app_pop">#19AA8B</color>
+    <color name="app_end">#3277b3</color>
     <color name="transparent">#00000000</color>
     <color name="app_darkerblue">#3277b3</color>
     <color name="app_orange">#ffa000</color>

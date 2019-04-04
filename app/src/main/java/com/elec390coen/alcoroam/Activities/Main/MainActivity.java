@@ -39,17 +39,13 @@ public class MainActivity extends AppCompatActivity {
     Button btn_setting;
     Button btn_alcohol;
     Button btn_hr;
-    Button btn_bluetooth;
     Button btn_logout;
-    Button btn_debug;
-    Button btn_display;
     TextView tv_welcome;
     User thisUser;
+    ShowcaseView showcaseView;
     private FirebaseAuth firebaseAuth;
     private FireBaseDBHelper fireBaseDBHelper;
-    ListView lv_readings;
 
-    List<TestResult> results = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,31 +53,12 @@ public class MainActivity extends AppCompatActivity {
         fireBaseDBHelper = new FireBaseDBHelper();
 
 
-        /*lv_readings = findViewById(R.id.lv_reading);
-
-        //debug
-        btn_debug = findViewById(R.id.btn_debug);
-        btn_debug.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fireBaseDBHelper.fetchUserAlcoholReading(firebaseAuth.getCurrentUser(),results);
-                Toast.makeText(MainActivity.this, "Fetch Complete", Toast.LENGTH_SHORT).show();
-            }
-        });
-        /*
-        btn_display = findViewById(R.id.btn_display);
-        btn_display.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                processData(results);
-            }
-        });*/
-
         //settings
         btn_setting = findViewById(R.id.btn_setting);
         btn_setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showcaseView.hide();
                 startActivity(new Intent(MainActivity.this, SettingActivity.class));
             }
         });
@@ -140,22 +117,28 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         if(playTutorial())
         {
             Button bt = new Button(this);
             bt.setBackgroundColor(Color.TRANSPARENT);
             bt.setText("");
             bt.setEnabled(false);
-            new ShowcaseView.Builder(this)
+            showcaseView = new ShowcaseView.Builder(this)
                     .setTarget(new ViewTarget(R.id.btn_setting, this))
                     .setContentTitle("Welcome to AlcoRoam!")
-                    .setContentText("Please click on the setting button as I will show you how to set up your devices.")
+                    .setContentText("Please click on the SETTING button as I will show you how to set up your devices.")
                     .withHoloShowcase()
-                    .replaceEndButton(bt)
                     .setStyle(R.style.ShowcaseView_custom)
                     .build();
+            showcaseView.hideButton();
         }
-
     }
 
     private boolean playTutorial()

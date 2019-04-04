@@ -65,19 +65,6 @@
             android:textStyle="bold" />
 
 
-
-
-
-        <Button
-            android:id="@+id/btn_debug"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/btn_alco"
-            android:background="@color/transparent"
-            android:text="Debug"
-            android:textColor="@color/app_white"
-            android:textSize="15sp"
-            android:textStyle="bold" />
     </RelativeLayout>
 
     <TextView

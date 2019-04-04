@@ -20,7 +20,7 @@
             android:layout_weight="1"
             android:gravity="center_vertical|left"
             android:text="device_name"
-            android:textColor="@color/app_black"
+            android:textColor="@color/app_white"
             android:textSize="20sp" />
 
         <TextView

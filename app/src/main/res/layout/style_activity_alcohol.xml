@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout android:layout_width="match_parent"
+<FrameLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android" >
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -10,10 +12,23 @@
     android:layout_height="match_parent"
     tools:context=".Activities.Alcohol.AlcoholActivity">
 
+    <TextView
+        android:id="@+id/tv_history"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/history"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:textColor="@color/app_white"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="16dp"/>
+
     <com.jjoe64.graphview.GraphView
         android:id="@+id/alcoView"
         android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_height="280dp"
         android:layout_margin="16dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -21,35 +36,52 @@
         android:layout_marginBottom="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_history"/>
 
-    <TextView
-        android:id="@+id/tv_response"
-        android:layout_width="match_parent"
-        android:layout_height="92dp"
-        android:gravity="center"
-        android:text="TextView"
-        android:textSize="26sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/recordAlco"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.706" />
+        app:layout_constraintRight_toRightOf="parent">
+        <ImageView
+            android:layout_width="160dp"
+            android:layout_height="120dp"
+            android:src="@drawable/ic_cloud"
+            android:scaleType="fitXY"/>
+        <TextView
+            android:id="@+id/tv_response"
+            android:layout_width="match_parent"
+            android:layout_height="92dp"
+            android:gravity="center"
+            android:text=""
+            android:textSize="26sp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="-10dp"
+            android:textColor="@color/app_black"
+            android:textStyle="bold"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:layout_editor_absoluteY="282dp" />
+    </FrameLayout>
+
 
 
     <ProgressBar
         android:id="@+id/pb_alcohol_level"
+        style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:layout_marginTop="40dp"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
+        android:layout_marginBottom="40dp"
         android:progress="25"
-        style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_response" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteY="476dp" />
 
     <TextView
         android:id="@+id/textView2"
@@ -94,33 +126,33 @@
 
     <Button
         android:id="@+id/btn_refresh_connection"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:background="@drawable/ic_refresh"
-        android:padding="2dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.185"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_bg"
+        android:drawableLeft="@drawable/ic_refresh"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:text="Reconnect"
+        android:textSize="15sp"
+        android:textColor="@color/app_white"
+        android:layout_marginBottom="10dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.782" />
+        app:layout_constraintBottom_toTopOf="@+id/pb_alcohol_level"/>
 
     <Button
         android:id="@+id/recordAlco"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="120dp"
+        android:background="@drawable/btn_bg"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:text="Test Alcohol"
-        android:background="@drawable/btn_bg"
         android:textColor="@color/app_white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.809"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginBottom="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btn_refresh_connection"/>
 
 
 
@@ -141,6 +173,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Please Hold the button on the box and start blowing"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="40dp"
+            android:gravity="center"
             android:textSize="20sp"
             android:textColor="@color/app_white"/>
         <ProgressBar

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
-    android:background="@drawable/login_bg">
+    android:background="@drawable/popup_bg">
 
 <RelativeLayout
     android:layout_width="300dp"
@@ -20,51 +20,59 @@
         android:layout_marginRight="30dp"
         android:paddingLeft="15dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
+        android:drawableLeft="@drawable/ic_user"
         android:inputType="textPersonName"
-        android:background="@drawable/btn_bg"
+        android:background="@drawable/et_bg"
 
          />
 
     <EditText
         android:id="@+id/contactEmail"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:inputType="textWebEmailAddress"
         android:layout_below="@+id/contactName"
+        android:drawableLeft="@drawable/ic_email"
         android:hint="Email"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:paddingLeft="15dp"
-        android:background="@drawable/btn_bg"
+        android:background="@drawable/et_bg"
         android:layout_marginTop="10dp"
          />
 
     <EditText
         android:id="@+id/contactPhone"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:hint="Phone Number"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
+        android:drawableLeft="@drawable/ic_phone"
         android:paddingLeft="15dp"
         android:inputType="phone"
         android:layout_below="@+id/contactEmail"
-        android:background="@drawable/btn_bg"
+        android:background="@drawable/et_bg"
         android:layout_marginTop="10dp"
         />
     </RelativeLayout>
     <RelativeLayout
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
         android:layout_below="@+id/st_layer1"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp">
     <Button
         android:id="@+id/btn_save"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:paddingRight="15dp"
+        android:paddingLeft="15dp"
+        android:layout_height="36dp"
         android:text="@string/save"
+        android:textSize="24sp"
+        android:textColor="@color/app_white"
+        android:layout_centerHorizontal="true"
         android:background="@drawable/btn_bg"/>
     </RelativeLayout>
 

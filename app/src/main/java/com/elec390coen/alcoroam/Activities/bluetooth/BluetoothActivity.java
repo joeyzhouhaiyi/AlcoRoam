@@ -43,6 +43,7 @@ public class BluetoothActivity extends AppCompatActivity {
     Button btn_search;
     ArrayAdapter adapter;
     BluetoothHelper bluetoothHelper;
+    ShowcaseView showcaseView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +57,10 @@ public class BluetoothActivity extends AppCompatActivity {
         btn_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(showcaseView.isShowing())
+                {
+                    showcaseView.hide();
+                }
                 if(btn_search.getText().toString().equals(getString(R.string.search)))
                 {
                     bluetoothHelper.registerReceiverWithFilter(bReciever); //register receiver
@@ -89,15 +94,16 @@ public class BluetoothActivity extends AppCompatActivity {
             bt.setBackgroundColor(Color.TRANSPARENT);
             bt.setText("");
             bt.setEnabled(false);
-            ShowcaseView showcaseView = new ShowcaseView.Builder(this)
+            showcaseView = new ShowcaseView.Builder(this)
                     .setTarget(new ViewTarget(R.id.btn_search, this))
                     .setContentTitle("Select Device")
                     .setContentText("Press SEARCH and select \"HC-05\" to establish connection.")
                     .withHoloShowcase()
-                    .replaceEndButton(bt)
+                    .hideOnTouchOutside()
                     .setStyle(R.style.ShowcaseView_custom)
                     .build();
             showcaseView.forceTextPosition(ShowcaseView.ABOVE_SHOWCASE);
+            showcaseView.hideButton();
         }
 
     }
