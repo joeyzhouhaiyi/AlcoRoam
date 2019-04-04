@@ -172,6 +172,7 @@ public class SettingActivity extends AppCompatActivity {
         btn_bluetooth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(showcaseView!=null)
                 showcaseView.hide();
                 startActivity(new Intent(SettingActivity.this, BluetoothActivity.class));
             }

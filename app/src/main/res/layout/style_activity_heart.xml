@@ -4,14 +4,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.HeartRate.HeartActivity">
+    tools:context=".Activities.HeartRate.HeartActivity"
+    android:background="@drawable/login_bg">
 
-
-    <com.jjoe64.graphview.GraphView
+    <TextView
+        android:id="@+id/tv_rt"
         android:layout_width="wrap_content"
-        android:layout_height="350dp"
-        android:id="@+id/graph"
-        />
+        android:layout_height="wrap_content"
+        android:text="@string/rt"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:textColor="@color/app_white"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/app_white"
+        android:layout_margin="8dp"
+        android:elevation="10dp"
+        android:layout_below="@+id/tv_rt">
+
+        <com.jjoe64.graphview.GraphView
+            android:id="@+id/gv_heart"
+            android:layout_width="match_parent"
+            android:layout_height="260dp"
+            android:layout_margin="16dp" />
+    </RelativeLayout>
+
     <LinearLayout
 
         android:orientation="vertical"

@@ -27,17 +27,10 @@ public class NewConnectedListener extends ConnectListenerImpl
         super(handler, null);
         _OldHandler= handler;
         _aNewHandler = _NewHandler;
-
-        // TODO Auto-generated constructor stub
-
     }
+
     public void Connected(ConnectedEvent<BTClient> eventArgs) {
         System.out.println(String.format("Connected to BioHarness %s.", eventArgs.getSource().getDevice().getName()));
-
-
-
-
-
 
         //Creates a new ZephyrProtocol object and passes it the BTComms object
         ZephyrProtocol _protocol = new ZephyrProtocol(eventArgs.getSource().getComms());
@@ -47,14 +40,10 @@ public class NewConnectedListener extends ConnectListenerImpl
                 ZephyrPacketArgs msg = eventArgs.getPacket();
                 byte CRCFailStatus;
                 byte RcvdBytes;
-
-
-
                 CRCFailStatus = msg.getCRCStatus();
                 RcvdBytes = msg.getNumRvcdBytes() ;
                 if (HR_SPD_DIST_PACKET==msg.getMsgID())
                 {
-
 
                     byte [] DataArray = msg.getBytes();
 
@@ -66,15 +55,6 @@ public class NewConnectedListener extends ConnectListenerImpl
                     text1.setData(b1);
                     _aNewHandler.sendMessage(text1);
                     System.out.println("Heart Rate is "+ HRate);
-
-                    //***************Displaying the Instant Speed********************************
-                    double InstantSpeed = HRSpeedDistPacket.GetInstantSpeed(DataArray);
-
-                    text1 = _aNewHandler.obtainMessage(INSTANT_SPEED);
-                    b1.putString("InstantSpeed", String.valueOf(InstantSpeed));
-                    text1.setData(b1);
-                    _aNewHandler.sendMessage(text1);
-                    System.out.println("Instant Speed is "+ InstantSpeed);
 
                 }
             }

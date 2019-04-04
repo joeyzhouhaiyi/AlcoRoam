@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         btn_setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(showcaseView!=null)
                 showcaseView.hide();
                 startActivity(new Intent(MainActivity.this, SettingActivity.class));
             }

@@ -26,6 +26,9 @@ import com.elec390coen.alcoroam.Controllers.DeviceManager;
 import com.elec390coen.alcoroam.Models.CurrentAlcoholSensor;
 import com.elec390coen.alcoroam.Models.CurrentHeartRateSensor;
 import com.elec390coen.alcoroam.R;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,28 +42,32 @@ import zephyr.android.HxMBT.BTClient;
 import zephyr.android.HxMBT.ConnectListenerImpl;
 import zephyr.android.HxMBT.ZephyrProtocol;
 
-public class HeartActivity<GraphView, LineGraphView> extends AppCompatActivity {
-    private int x = 0;
+public class HeartActivity extends AppCompatActivity {
+
+    GraphView gv_heart;
+    private LineGraphSeries<DataPoint> series;
+    static int second=0;
+
     private Button getHeartRate;
-    private Button refreshButton;
-    private TextView viewData;
-    private TextView connectionStsView;
-    Handler btin;
-    final int handlerState = 0;
-    private BluetoothSocket btSocket = null;
-    private StringBuilder recDataString = new StringBuilder();
-    private static final UUID BTUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     BluetoothAdapter adapter = null;
     BTClient _bt;
-    ZephyrProtocol _protocol;
     NewConnectedListener _NConnListener;
     private final int HEART_RATE = 0x100;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.style_activity_heart);
+        gv_heart = findViewById(R.id.gv_heart);
+        series = new LineGraphSeries<>();
+        gv_heart.addSeries(series);
+        gv_heart.getViewport().setXAxisBoundsManual(true);
+        gv_heart.getViewport().setMinX(0);
+        gv_heart.getViewport().setMaxX(60);
+        gv_heart.getViewport().setYAxisBoundsManual(true);
+        gv_heart.getViewport().setMinY(0);
+        gv_heart.getViewport().setMaxY(150);
+
         /*Sending a message to android that we are going to initiate a pairing request*/
         IntentFilter filter = new IntentFilter("android.bluetooth.device.action.PAIRING_REQUEST");
         /*Registering a new BTBroadcast receiver from the Main Activity context with pairing request event*/
@@ -70,7 +77,7 @@ public class HeartActivity<GraphView, LineGraphView> extends AppCompatActivity {
         this.getApplicationContext().registerReceiver(new BTBondReceiver(), filter2);
 
         //Obtaining the handle to act on the CONNECT button
-        TextView tv = (TextView) findViewById(R.id.connectionStsView);
+        TextView tv = findViewById(R.id.connectionStsView);
         String ErrorText  = "Not Connected to HxM ! !";
         tv.setText(ErrorText);
         //Connect U.I Elements
@@ -80,9 +87,8 @@ public class HeartActivity<GraphView, LineGraphView> extends AppCompatActivity {
             getHeartRate.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     String BhMacID = "00:07:80:9D:8A:E8";
-                    //String BhMacID = "00:07:80:88:F6:BF";
                     adapter = BluetoothAdapter.getDefaultAdapter();
-
+                    second = 0;
                     Set<BluetoothDevice> pairedDevices = adapter.getBondedDevices();
 
                     if (pairedDevices.size() > 0)
@@ -108,7 +114,7 @@ public class HeartActivity<GraphView, LineGraphView> extends AppCompatActivity {
                     _NConnListener = new NewConnectedListener(Newhandler,Newhandler);
                     _bt.addConnectedEventListener(_NConnListener);
 
-                    TextView tv1 = (TextView) findViewById(R.id.hrValueView);
+                    TextView tv1 = findViewById(R.id.hrValueView);
                     tv1.setText("000");
 
 
@@ -117,7 +123,7 @@ public class HeartActivity<GraphView, LineGraphView> extends AppCompatActivity {
                     if(_bt.IsConnected())
                     {
                         _bt.start();
-                        TextView tv = (TextView) findViewById(R.id.connectionStsView);
+                        TextView tv = findViewById(R.id.connectionStsView);
                         String ErrorText  = "Connected to HxM "+DeviceName;
                         tv.setText(ErrorText);
 
@@ -126,14 +132,14 @@ public class HeartActivity<GraphView, LineGraphView> extends AppCompatActivity {
                     }
                     else
                     {
-                        TextView tv = (TextView) findViewById(R.id.connectionStsView);
+                        TextView tv = findViewById(R.id.connectionStsView);
                         String ErrorText  = "Unable to Connect !";
                         tv.setText(ErrorText);
                     }
                 }
             });
         }
-        Button btnDisconnect = (Button) findViewById(R.id.disconnect);
+        Button btnDisconnect = findViewById(R.id.disconnect);
         if (btnDisconnect != null)
         {
             btnDisconnect.setOnClickListener(new View.OnClickListener() {
@@ -145,11 +151,16 @@ public class HeartActivity<GraphView, LineGraphView> extends AppCompatActivity {
                     TextView tv = (TextView) findViewById(R.id.connectionStsView);
                     String ErrorText  = "Disconnected from HxM!";
                     tv.setText(ErrorText);
+                    if(_bt.IsConnected())
+                    {
+                        /*This disconnects listener from acting on received messages*/
+                        _bt.removeConnectedEventListener(_NConnListener);
+                        /*Close the communication with the device & throw an exception if failure*/
+                        _bt.Close();
+                    }else{
+                        Toast.makeText(HeartActivity.this,"Device not connected",Toast.LENGTH_SHORT).show();
+                    }
 
-                    /*This disconnects listener from acting on received messages*/
-                    _bt.removeConnectedEventListener(_NConnListener);
-                    /*Close the communication with the device & throw an exception if failure*/
-                    _bt.Close();
 
                 }
             });
@@ -196,7 +207,6 @@ public class HeartActivity<GraphView, LineGraphView> extends AppCompatActivity {
         }
     }
 
-
     final  Handler Newhandler = new Handler(){
         public void handleMessage(Message msg)
         {
@@ -207,135 +217,16 @@ public class HeartActivity<GraphView, LineGraphView> extends AppCompatActivity {
                     String HeartRatetext = msg.getData().getString("HeartRate");
                     tv = findViewById(R.id.hrValueView);
                     System.out.println("Heart Rate Info is "+ HeartRatetext);
-                    if (tv != null)tv.setText(HeartRatetext);
+                    if (tv != null)
+                    {
+                        second++;
+                        tv.setText(HeartRatetext);
+                        series.appendData(new DataPoint(second,Integer.parseInt(HeartRatetext)),true,60);
+                    }
+
 
             }
         }
 
     };
 }
-/*
-    connectionStsView = (TextView) findViewById(R.id.connectionStsView);
-        refreshButton = (Button) findViewById(R.id.refreshBtn);
-        viewData = findViewById(R.id.hrValueView);
-        /*final GraphView graphView = new LineGraphView(
-                this, // context
-                "Heart Rate Sensor" // heading
-        );
-
-        graphView.setVerticalLabels(new String[]{"high", "normal", "low"});
-
-        graphView.setCustomLabelFormatter(new CustomLabelFormatter() {
-            @Override
-            public String formatLabel(double value, boolean isValueX) {
-                if (isValueX) {
-                    return null;
-                } else {
-                    if (value < 60) {
-                        return "low";
-                    } else if (value < 100) {
-                        return "normal";
-                    } else {
-                        return "high";
-                    }
-                }
-            }
-        });*/
-
-
-/*
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        CurrentHeartRateSensor currentHeartRateSensor = DeviceManager.getCurrentHeartRateSensor();
-
-        if (currentHeartRateSensor != null) {
-            BluetoothDevice device = currentHeartRateSensor.getDevice();
-            connectionStsView.setText("Connected to:\n" + device.getName() + " - " + device.getAddress());
-            try {
-                btSocket = createBluetoothSocket(device);
-            } catch (IOException e) {
-                Toast.makeText(getBaseContext(), "Socket creation failed", Toast.LENGTH_LONG).show();
-            }
-            // Establish the Bluetooth socket connection.
-            try {
-                btSocket = (BluetoothSocket) device.getClass().getMethod("createRfcommSocket", new Class[]{int.class}).invoke(device, 1);
-                btSocket.connect();
-            } catch (Exception e) {
-
-            }
-            mConnectedThread = new ConnectedThread(btSocket);
-            mConnectedThread.start();
-
-            //I send a character when resuming.beginning transmission to check device is connected
-            //If it is not an exception will be thrown in the write method and finish() will be called
-            //mConnectedThread.write("x");
-        } else {
-            connectionStsView.setText("Device not connected");
-        }
-
-        btin = new Handler() {
-            public void handleMessage(Message msg)
-            {
-                TextView tv;
-                if (msg.what == HEART_RATE)
-                {
-                        String HeartRatetext = msg.getData().getString("HeartRate");
-                        tv = (EditText)findViewById(R.id.hrValueView);
-                        System.out.println("Heart Rate Info is "+ HeartRatetext);
-                        if (tv != null)tv.setText(HeartRatetext);
-                }
-            }
-
-        };
-    }
-
-
-    private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {
-
-        return device.createRfcommSocketToServiceRecord(BTUUID);
-    }
-
-
-    public class ConnectedThread extends Thread {
-        private final InputStream mmInStream;
-        private final OutputStream mmOutStream;
-
-        //creation of the connect thread
-        public ConnectedThread(BluetoothSocket socket) {
-            InputStream tmpIn = null;
-            OutputStream tmpOut = null;
-
-            try {
-                //Create I/O streams for connection
-                tmpIn = socket.getInputStream();
-                tmpOut = socket.getOutputStream();
-            } catch (IOException e) {
-            }
-
-            mmInStream = tmpIn;
-            mmOutStream = tmpOut;
-        }
-
-
-        public void run() {
-            byte[] buffer = new byte[256];
-            int bytes;
-
-            // Keep looping to listen for received messages
-            while (true) {
-                try {
-                    bytes = mmInStream.read(buffer);            //read bytes from input buffer
-                    String readMessage = new String(buffer, 0, bytes);
-                    // Send the obtained bytes to the UI Activity via handler
-                    btin.obtainMessage(handlerState, bytes, -1, readMessage).sendToTarget();
-                } catch (IOException e) {
-                    break;
-                }
-            }
-        }
-
-    }
-}
-*/

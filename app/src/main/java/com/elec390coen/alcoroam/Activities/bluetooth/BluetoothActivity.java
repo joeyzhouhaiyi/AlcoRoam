@@ -57,7 +57,7 @@ public class BluetoothActivity extends AppCompatActivity {
         btn_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(showcaseView.isShowing())
+                if(showcaseView!=null)
                 {
                     showcaseView.hide();
                 }
