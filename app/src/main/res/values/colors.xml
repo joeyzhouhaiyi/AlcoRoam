@@ -16,4 +16,6 @@
     <color name="transparent">#00000000</color>
     <color name="app_darkerblue">#3277b3</color>
     <color name="app_orange">#ffa000</color>
+    <color name="app_start1">#19AA8B</color>
+    <color name="app_end1">#23A7D8</color>
 </resources>

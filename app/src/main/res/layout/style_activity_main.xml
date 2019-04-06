@@ -34,38 +34,52 @@
 
     <RelativeLayout
         android:id="@+id/main_l2"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/main_l1"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:paddingLeft="100dp"
-        android:paddingRight="100dp">
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="30dp"
+        android:paddingLeft="60dp"
+        android:paddingRight="60dp"
+        android:orientation="horizontal">
 
 
         <Button
             android:id="@+id/btn_hrate"
-            android:layout_width="150dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/transparent"
+            android:background="@drawable/btn_bg"
+            android:layout_alignParentRight="true"
             android:text="Heart Rate"
             android:textColor="@color/app_white"
             android:textSize="15sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"/>
 
         <Button
             android:id="@+id/btn_alco"
-            android:layout_width="150dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/btn_hrate"
-            android:background="@color/transparent"
+            android:background="@drawable/btn_bg"
+            android:layout_marginRight="30dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:text="Alcohol"
+            android:layout_alignParentLeft="true"
             android:textColor="@color/app_white"
             android:textSize="15sp"
             android:textStyle="bold" />
 
 
     </RelativeLayout>
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/ic_drive4"
+        android:layout_below="@id/main_l2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="70dp"/>
 
     <TextView
         android:id="@+id/tv_welcome"
