@@ -16,8 +16,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".Activities.Alcohol.TextPop"
-            android:theme="@style/AppTheme.PopMe"></activity>
         <activity
             android:name=".Activities.Alcohol.PhoneCallPop"
             android:theme="@style/AppTheme.PopMe"></activity>

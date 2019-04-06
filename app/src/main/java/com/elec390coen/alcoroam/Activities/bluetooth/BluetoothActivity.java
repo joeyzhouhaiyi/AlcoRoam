@@ -147,9 +147,6 @@ public class BluetoothActivity extends AppCompatActivity {
                 Intent startServiceIntent = new Intent(BluetoothActivity.this,BluetoothServices.class);
                 startServiceIntent.putExtra("deviceAddress",selectedDevice.getAddress());
                 startService(startServiceIntent);
-                //bluetoothHelper.stopSearchingForDevice();
-                //DeviceManager.setCurrentAlcoholSensor(new CurrentAlcoholSensor(selectedDevice));
-                //new ConnectBT(BluetoothActivity.this,selectedDevice).execute();
             }
         });
         //set current device name and initialize checkbox

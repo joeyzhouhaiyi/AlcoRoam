@@ -1,8 +1,6 @@
 package com.elec390coen.alcoroam.Activities.Alcohol;
 
 import android.Manifest;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -27,37 +25,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.elec390coen.alcoroam.Activities.Setting.GPStracker;
-import com.elec390coen.alcoroam.Activities.bluetooth.BluetoothActivity;
-import com.elec390coen.alcoroam.Activities.bluetooth.ConnectedThread;
-import com.elec390coen.alcoroam.Controllers.DeviceManager;
 import com.elec390coen.alcoroam.Controllers.FireBaseAuthHelper;
 import com.elec390coen.alcoroam.Controllers.FireBaseDBHelper;
 import com.elec390coen.alcoroam.Models.GPSLocation;
 import com.elec390coen.alcoroam.Models.TestResult;
-import com.elec390coen.alcoroam.Models.User;
 import com.elec390coen.alcoroam.R;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.LabelFormatter;
-import com.jjoe64.graphview.Viewport;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
-
 
 
 public class AlcoholActivity extends AppCompatActivity {
