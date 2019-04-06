@@ -60,6 +60,7 @@
                     android:textColor="@color/app_white"
                     android:background="@drawable/et_bg"
                     android:drawableLeft="@drawable/ic_email"
+                    android:drawablePadding="5dp"
                     android:inputType="textEmailAddress" />
 
                 <TextView
@@ -84,6 +85,7 @@
                     android:background="@drawable/et_bg"
                     android:textColor="@color/app_white"
                     android:drawableLeft="@drawable/ic_user"
+                    android:drawablePadding="5dp"
                     android:inputType="textEmailAddress" />
 
                 <TextView
@@ -105,6 +107,7 @@
                     android:background="@drawable/et_bg"
                     android:textColor="@color/app_white"
                     android:drawableLeft="@drawable/ic_pass"
+                    android:drawablePadding="5dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:paddingLeft="15dp"
@@ -130,6 +133,7 @@
                     android:background="@drawable/et_bg"
                     android:textColor="@color/app_white"
                     android:drawableLeft="@drawable/ic_verify"
+                    android:drawablePadding="5dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:paddingLeft="15dp"

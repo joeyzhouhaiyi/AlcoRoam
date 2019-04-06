@@ -36,6 +36,8 @@ import com.elec390coen.alcoroam.Models.GPSLocation;
 import com.elec390coen.alcoroam.Models.TestResult;
 import com.elec390coen.alcoroam.Models.User;
 import com.elec390coen.alcoroam.R;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -66,6 +68,7 @@ public class AlcoholActivity extends AppCompatActivity {
     GraphView readingPlot;
     LineGraphSeries series;
     Button btn_refresh_connection;
+    ShowcaseView showcaseView;
 
     private StringBuilder recDataString = new StringBuilder();
     private static final int PERMISSION_REQUEST_CODE = 1;
@@ -144,6 +147,9 @@ public class AlcoholActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 int index = 0;
+                readingPlot.removeAllSeries();
+                series = new LineGraphSeries();
+                readingPlot.addSeries(series);
                 DataPoint[] dp = new DataPoint[(int)dataSnapshot.getChildrenCount()];
                 results.clear();
                 for (DataSnapshot readingSnapshot: dataSnapshot.getChildren()) {
@@ -162,6 +168,7 @@ public class AlcoholActivity extends AppCompatActivity {
                         Log.d("TAG",ex.getLocalizedMessage());
                     }
                 }
+                if(series!=null)
                 series.resetData(dp);
             }
 
@@ -189,8 +196,6 @@ public class AlcoholActivity extends AppCompatActivity {
         fireBaseAuthHelper = new FireBaseAuthHelper();
         record=findViewById(R.id.recordAlco);
         readingPlot = findViewById(R.id.alcoView);
-        series = new LineGraphSeries();
-        readingPlot.addSeries(series);
         readingPlot.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this,new SimpleDateFormat("dd/MM\nhh:mm:ss")));
         readingPlot.getGridLabelRenderer().setNumHorizontalLabels(4);
         readingPlot.getGridLabelRenderer().setHumanRounding(true);
@@ -245,9 +250,8 @@ public class AlcoholActivity extends AppCompatActivity {
                 }
             }
             SmsManager.getDefault().sendTextMessage(contactNumber, null
-                    , "Hello "+contactName + ", My alcohol concentration is at: "+currtest+". Please come pick me up at: Longitude:"
-                            + myLocation.getLon() + ", Latitude: "
-                            + myLocation.getLat() + "!", null, null);
+                    , "Hello "+contactName + ", my alcohol concentration is at: "+currtest/1000+"g/L. Can you please come pick me up at: ["
+                            + myLocation.getLastSeen()+"] as I am not allowed to drive!", null, null);
         }
     }
 
@@ -300,6 +304,54 @@ public class AlcoholActivity extends AppCompatActivity {
             }
         }
     };
+
+    private boolean playTutorial()
+    {
+        SharedPreferences preferences = getSharedPreferences("LoginInfo",0);
+        boolean play = preferences.getBoolean("tut4",false);
+        preferences.edit().putBoolean("tut4",false).apply();
+        return play;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(playTutorial())
+        {
+            showcaseView = new ShowcaseView.Builder(this)
+                    .setTarget(new ViewTarget(R.id.recordAlco,this))
+                    .setContentTitle("Test Result")
+                    .setContentText("Press here to start testing your alcohol concentration, and don't forget to hold down the button on AlcoBox while testing!")
+                    .withHoloShowcase()
+                    .setStyle(R.style.ShowcaseView_custom)
+                    .blockAllTouches()
+                    .setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            showcaseView.hide();
+                            NextTutorial();
+                        }
+                    })
+                    .build();
+        }
+    }
+
+    private void NextTutorial() {
+        showcaseView = new ShowcaseView.Builder(this)
+                .setTarget(new ViewTarget(R.id.btn_refresh_connection,this))
+                .setContentTitle("Reconnection")
+                .setContentText("In case your bluetooth device is disconnected, press here to reconnect to it.")
+                .withHoloShowcase()
+                .setStyle(R.style.ShowcaseView_custom)
+                .blockAllTouches()
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showcaseView.hide();
+                    }
+                })
+                .build();
+    }
 }
 
 

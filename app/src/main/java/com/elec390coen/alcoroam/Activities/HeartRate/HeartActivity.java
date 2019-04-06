@@ -66,7 +66,7 @@ public class HeartActivity extends AppCompatActivity {
         gv_heart.getViewport().setMaxX(60);
         gv_heart.getViewport().setYAxisBoundsManual(true);
         gv_heart.getViewport().setMinY(0);
-        gv_heart.getViewport().setMaxY(150);
+        gv_heart.getViewport().setMaxY(160);
 
         /*Sending a message to android that we are going to initiate a pairing request*/
         IntentFilter filter = new IntentFilter("android.bluetooth.device.action.PAIRING_REQUEST");
@@ -78,47 +78,55 @@ public class HeartActivity extends AppCompatActivity {
 
         //Obtaining the handle to act on the CONNECT button
         TextView tv = findViewById(R.id.connectionStsView);
-        String ErrorText  = "Not Connected to HxM ! !";
-        tv.setText(ErrorText);
+        if(_bt == null)
+        {
+            String ErrorText  = "Not connected to HxM";
+            tv.setText(ErrorText);
+        }else
+        {
+            if(_bt.IsConnected())
+            {
+                String ErrorText  = "Connected to HxM "+_bt.getDevice().getName();
+                tv.setText(ErrorText);
+            }
+        }
         //Connect U.I Elements
         getHeartRate = (Button) findViewById(R.id.heartRateBtn);
         if (getHeartRate != null)
         {
             getHeartRate.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    String BhMacID = "00:07:80:9D:8A:E8";
-                    adapter = BluetoothAdapter.getDefaultAdapter();
-                    second = 0;
-                    Set<BluetoothDevice> pairedDevices = adapter.getBondedDevices();
+                    String DeviceName="";
+                    if(_bt == null) {
+                        String BhMacID = "00:07:80:9D:8A:E8";
+                        Toast.makeText(HeartActivity.this, "Connecting...", Toast.LENGTH_LONG).show();
+                        adapter = BluetoothAdapter.getDefaultAdapter();
+                        second = 0;
+                        Set<BluetoothDevice> pairedDevices = adapter.getBondedDevices();
 
-                    if (pairedDevices.size() > 0)
-                    {
-                        for (BluetoothDevice device : pairedDevices)
+                        if (pairedDevices.size() > 0)
                         {
-                            if (device.getName().startsWith("HXM"))
+                            for (BluetoothDevice device : pairedDevices)
                             {
-                                BluetoothDevice btDevice = device;
-                                BhMacID = btDevice.getAddress();
-                                break;
+                                if (device.getName().startsWith("HXM"))
+                                {
+                                    BluetoothDevice btDevice = device;
+                                    BhMacID = btDevice.getAddress();
+                                    break;
 
+                                }
                             }
                         }
 
-
+                        //BhMacID = btDevice.getAddress();
+                        BluetoothDevice Device = adapter.getRemoteDevice(BhMacID);
+                        DeviceName = Device.getName();
+                        _bt = new BTClient(adapter, BhMacID);
+                        _NConnListener = new NewConnectedListener(Newhandler, Newhandler);
+                        _bt.addConnectedEventListener(_NConnListener);
                     }
-
-                    //BhMacID = btDevice.getAddress();
-                    BluetoothDevice Device = adapter.getRemoteDevice(BhMacID);
-                    String DeviceName = Device.getName();
-                    _bt = new BTClient(adapter, BhMacID);
-                    _NConnListener = new NewConnectedListener(Newhandler,Newhandler);
-                    _bt.addConnectedEventListener(_NConnListener);
-
                     TextView tv1 = findViewById(R.id.hrValueView);
-                    tv1.setText("000");
-
-
-                    ((TextView) findViewById(R.id.connectionStsView)).setText(BhMacID);
+                    tv1.setText("");
 
                     if(_bt.IsConnected())
                     {
@@ -126,46 +134,34 @@ public class HeartActivity extends AppCompatActivity {
                         TextView tv = findViewById(R.id.connectionStsView);
                         String ErrorText  = "Connected to HxM "+DeviceName;
                         tv.setText(ErrorText);
-
-                        //Reset all the values to 0s
-
                     }
                     else
                     {
                         TextView tv = findViewById(R.id.connectionStsView);
-                        String ErrorText  = "Unable to Connect !";
+                        String ErrorText  = "Unable to Connect!";
                         tv.setText(ErrorText);
                     }
                 }
             });
         }
-        Button btnDisconnect = findViewById(R.id.disconnect);
-        if (btnDisconnect != null)
-        {
-            btnDisconnect.setOnClickListener(new View.OnClickListener() {
-                @Override
-                /*Functionality to act if the button DISCONNECT is touched*/
-                public void onClick(View v) {
-                    // TODO Auto-generated method stub
-                    /*Reset the global variables*/
-                    TextView tv = (TextView) findViewById(R.id.connectionStsView);
-                    String ErrorText  = "Disconnected from HxM!";
-                    tv.setText(ErrorText);
-                    if(_bt.IsConnected())
-                    {
-                        /*This disconnects listener from acting on received messages*/
-                        _bt.removeConnectedEventListener(_NConnListener);
-                        /*Close the communication with the device & throw an exception if failure*/
-                        _bt.Close();
-                    }else{
-                        Toast.makeText(HeartActivity.this,"Device not connected",Toast.LENGTH_SHORT).show();
-                    }
 
-
-                }
-            });
-        }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(_bt != null)
+        {
+            if(_bt.IsConnected()) {
+                /*This disconnects listener from acting on received messages*/
+                _bt.removeConnectedEventListener(_NConnListener);
+                /*Close the communication with the device & throw an exception if failure*/
+                _bt.Close();
+            }
+        }
+
+    }
+
     private class BTBondReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -189,19 +185,14 @@ public class HeartActivity extends AppCompatActivity {
                 Object result = m.invoke(device, pin);
                 Log.d("BTTest", result.toString());
             } catch (SecurityException e1) {
-                // TODO Auto-generated catch block
                 e1.printStackTrace();
             } catch (NoSuchMethodException e1) {
-                // TODO Auto-generated catch block
                 e1.printStackTrace();
             } catch (IllegalArgumentException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             } catch (InvocationTargetException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
@@ -220,7 +211,7 @@ public class HeartActivity extends AppCompatActivity {
                     if (tv != null)
                     {
                         second++;
-                        tv.setText(HeartRatetext);
+                        tv.setText(HeartRatetext+"BPM");
                         series.appendData(new DataPoint(second,Integer.parseInt(HeartRatetext)),true,60);
                     }
 

@@ -90,28 +90,44 @@ public class BluetoothActivity extends AppCompatActivity {
         });
         if(playTutorial())
         {
-            Button bt = new Button(this);
-            bt.setBackgroundColor(Color.TRANSPARENT);
-            bt.setText("");
-            bt.setEnabled(false);
             showcaseView = new ShowcaseView.Builder(this)
-                    .setTarget(new ViewTarget(R.id.btn_search, this))
-                    .setContentTitle("Select Device")
-                    .setContentText("Press SEARCH and select \"HC-05\" to establish connection.")
+                    .setTarget(new ViewTarget(R.id.enable_bt,this))
+                    .setContentTitle("Enable Bluetooth")
+                    .setContentText("Here you can turn on/off your bluetooth.")
                     .withHoloShowcase()
-                    .hideOnTouchOutside()
                     .setStyle(R.style.ShowcaseView_custom)
+                    .blockAllTouches()
+                    .setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            showcaseView.hide();
+                            NextTutorial();
+                        }
+                    })
                     .build();
-            showcaseView.forceTextPosition(ShowcaseView.ABOVE_SHOWCASE);
-            showcaseView.hideButton();
+
         }
 
+    }
+
+    private void NextTutorial() {
+        showcaseView = new ShowcaseView.Builder(this)
+                .setTarget(new ViewTarget(R.id.btn_search, this))
+                .setContentTitle("Select Device")
+                .setContentText("Press SEARCH and select \"HC-05\" to establish connection.")
+                .withHoloShowcase()
+                .hideOnTouchOutside()
+                .setStyle(R.style.ShowcaseView_custom)
+                .build();
+        showcaseView.forceTextPosition(ShowcaseView.ABOVE_SHOWCASE);
+        showcaseView.hideButton();
     }
 
     private boolean playTutorial()
     {
         SharedPreferences preferences = getSharedPreferences("LoginInfo",0);
-        boolean play = preferences.getBoolean("playTutorial",false);
+        boolean play = preferences.getBoolean("tut3",false);
+        preferences.edit().putBoolean("tut3",false).apply();
         return play;
     }
 
@@ -172,8 +188,12 @@ public class BluetoothActivity extends AppCompatActivity {
             }
             else if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                if(device.getName()!=null)
                 deviceList.add(device);
                 adapter.notifyDataSetChanged();
+            }else if(BluetoothDevice.ACTION_ACL_CONNECTED.equals(action))
+            {
+                Toast.makeText(BluetoothActivity.this,"Device Connected",Toast.LENGTH_SHORT).show();
             }
         }
     };

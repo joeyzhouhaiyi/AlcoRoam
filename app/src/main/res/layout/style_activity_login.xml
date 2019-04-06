@@ -58,6 +58,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:layout_marginTop="5dp"
+                        android:drawablePadding="5dp"
                         android:background="@drawable/et_bg"
                         android:drawableLeft="@drawable/ic_email"
                         android:textColor="@color/app_white"
@@ -85,6 +86,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:layout_marginTop="5dp"
+                        android:drawablePadding="5dp"
                         android:background="@drawable/et_bg"
                         android:drawableLeft="@drawable/ic_pass"
                         android:paddingLeft="15dp"
@@ -119,6 +121,7 @@
                 />
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/ll_error"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/layer3">
@@ -126,9 +129,8 @@
                     android:id="@+id/tv_login_error"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="4dp"
                     android:textColor="@color/app_red"
                     android:textSize="12sp"
                     />
@@ -138,8 +140,8 @@
                 android:id="@+id/btn_signin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/layer2"
-                android:layout_marginTop="60dp"
+                android:layout_below="@+id/ll_error"
+                android:layout_marginTop="40dp"
                 android:background="@drawable/btn_bg"
                 android:text="Sign in"
                 android:layout_centerHorizontal="true"
@@ -156,6 +158,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         >

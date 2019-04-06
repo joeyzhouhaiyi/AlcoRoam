@@ -30,7 +30,7 @@
     <style name="ShowcaseView_custom" parent="ShowcaseView.Light">
         <item name="sv_titleTextAppearance">@color/app_orange</item>
         <item name="sv_detailTextAppearance">@color/app_black</item>
-        <item name="sv_backgroundColor">#D2000000</item>
+        <item name="sv_backgroundColor">#BB000000</item>
         <item name="sv_buttonText">@string/empty</item>
     </style>
 

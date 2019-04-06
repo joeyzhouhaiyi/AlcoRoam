@@ -3,7 +3,7 @@ package com.elec390coen.alcoroam.Models;
 public class GPSLocation {
     String lon;
     String lat;
-
+    String lastSeen;
     private static GPSLocation instance = null;
 
     public static GPSLocation getInstance()
@@ -29,4 +29,15 @@ public class GPSLocation {
     public void setLat(String lat) {
         this.lat = lat;
     }
+
+    public void setLastSeen(String lastSeen)
+    {
+        this.lastSeen = lastSeen;
+    }
+
+    public String getLastSeen()
+    {
+        return this.lastSeen;
+    }
+
 }

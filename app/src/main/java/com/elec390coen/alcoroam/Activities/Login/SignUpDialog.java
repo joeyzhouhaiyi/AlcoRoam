@@ -85,7 +85,12 @@ public class SignUpDialog extends Dialog {
                                             fireBaseDBHelper.addNewUser(currentUserId,nickname,email,password);
                                             SharedPreferences sharedPreferences = mContext.getSharedPreferences("LoginInfo", 0);
                                             SharedPreferences.Editor ed = sharedPreferences.edit();
-                                            ed.putBoolean("playTutorial",true);
+                                            ed.putBoolean("tut1",true);
+                                            ed.putBoolean("tut2",true);
+                                            ed.putBoolean("tut3",true);
+                                            ed.putBoolean("tut4",true);
+                                            ed.putBoolean("tut5",true);
+                                            ed.putBoolean("tut6",true);
                                             ed.apply();
                                             dismiss();
                                             getContext().startActivity(new Intent(getOwnerActivity(),MainActivity.class));

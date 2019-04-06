@@ -71,6 +71,7 @@ public class BluetoothHelper {
         //setup intent filter and register receiver
         IntentFilter filter = new IntentFilter();
         filter.addAction(BluetoothDevice.ACTION_FOUND);
+        filter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
         filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
         filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
         context.registerReceiver(broadcastReceiver, filter);

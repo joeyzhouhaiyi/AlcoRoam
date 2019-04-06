@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -32,6 +34,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.List;
+import java.util.Locale;
+
 public class SettingActivity extends AppCompatActivity {
 
 
@@ -39,8 +44,7 @@ public class SettingActivity extends AppCompatActivity {
     TextView textViewName;
     TextView textViewEmail;
     Switch GPS_switch;
-    TextView textViewLat;
-    TextView textViewLon;
+    TextView tv_location;
     Button btn_bluetooth;
     ShowcaseView showcaseView;
 
@@ -59,8 +63,7 @@ public class SettingActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},123);
         initView();
         getCurrentUserInfo();
-        textViewLat = findViewById(R.id.GPS_latView);
-        textViewLon = findViewById(R.id.GPS_lonView);
+        tv_location = findViewById(R.id.tv_location);
         GPS_switch = findViewById(R.id.GPSswitch);
         GPS_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -76,9 +79,20 @@ public class SettingActivity extends AppCompatActivity {
                         GPSLocation myLocation = GPSLocation.getInstance();
                         myLocation.setLat(String.valueOf(lat));
                         myLocation.setLon(String.valueOf(lon));
-                        textViewLat.setText(Double.toString(lat));
-                        textViewLon.setText(Double.toString(lon));
-                        //Toast.makeText(getApplicationContext(), "LAT:" +lat+"\n LON:" +lon, Toast.LENGTH_SHORT).show();
+                        Geocoder geocoder;
+                        List<Address> addresses;
+                        geocoder = new Geocoder(SettingActivity.this, Locale.getDefault());
+
+                        try{
+                            addresses = geocoder.getFromLocation(lat, lon, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+
+                            String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                            myLocation.setLastSeen(address);
+                            tv_location.setText(address);
+                        }catch (Exception ex){
+                            Toast.makeText(SettingActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+
                     }else
                     {
                         Toast.makeText(SettingActivity.this, "Location is null", Toast.LENGTH_SHORT).show();
@@ -86,9 +100,7 @@ public class SettingActivity extends AppCompatActivity {
 
                 }
                 else {
-                    textViewLat.setText(null);
-                    textViewLon.setText(null);
-                    Toast.makeText(SettingActivity.this, "GPS Reading Clear", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SettingActivity.this, "GPS Disabled", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -109,20 +121,51 @@ public class SettingActivity extends AppCompatActivity {
         super.onResume();
         if(playTutorial())
         {
-            Button bt = new Button(this);
-            bt.setBackgroundColor(Color.TRANSPARENT);
-            bt.setText("");
-            bt.setEnabled(false);
             showcaseView = new ShowcaseView.Builder(this)
-                    .setTarget(new ViewTarget(R.id.btn_bt, this))
-                    .setContentTitle("Setup Bluetooth")
-                    .setContentText("Click here to setup your bluetooth connection.")
+                    .setTarget(new ViewTarget(R.id.rl_tvs,this))
+                    .setContentTitle("Emergency Contact")
+                    .setContentText("Here you can save your emergency contact's information. This is very important!")
                     .withHoloShowcase()
                     .setStyle(R.style.ShowcaseView_custom)
+                    .blockAllTouches()
+                    .setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            showcaseView.hide();
+                            NextTutorial1();
+                        }
+                    })
                     .build();
-            showcaseView.forceTextPosition(ShowcaseView.ABOVE_SHOWCASE);
-            showcaseView.hideButton();
+
         }
+    }
+    private void NextTutorial1() {
+        showcaseView = new ShowcaseView.Builder(this)
+                .setTarget(new ViewTarget(R.id.GPSswitch, this))
+                .setContentTitle("GPS")
+                .setContentText("Switch your GPS on so your friend can find you!")
+                .withHoloShowcase()
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showcaseView.hide();
+                        NextTutorial2();
+                    }
+                })
+                .setStyle(R.style.ShowcaseView_custom)
+                .build();
+    }
+
+    private void NextTutorial2() {
+        showcaseView = new ShowcaseView.Builder(this)
+                .setTarget(new ViewTarget(R.id.btn_bt, this))
+                .setContentTitle("Setup Bluetooth")
+                .setContentText("Click here to setup your bluetooth connection.")
+                .withHoloShowcase()
+                .setStyle(R.style.ShowcaseView_custom)
+                .build();
+        showcaseView.forceTextPosition(ShowcaseView.ABOVE_SHOWCASE);
+        showcaseView.hideButton();
     }
 
     public void openDialog() {
@@ -183,7 +226,8 @@ public class SettingActivity extends AppCompatActivity {
     private boolean playTutorial()
     {
         SharedPreferences preferences = getSharedPreferences("LoginInfo",0);
-        boolean play = preferences.getBoolean("playTutorial",false);
+        boolean play = preferences.getBoolean("tut2",false);
+        preferences.edit().putBoolean("tut2",false).apply();
         return play;
     }
 

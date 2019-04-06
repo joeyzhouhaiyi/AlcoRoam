@@ -34,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
     private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
     private Boolean saveLogin;
+    private Boolean autoLogin;
     private FirebaseAuth Auth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,32 +46,36 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String email = et_email.getText().toString();
                 String password = et_pass.getText().toString();
-                if(cb_savelogin.isChecked()){
+                if(cb_savelogin.isChecked()){ //remember me is checked
                     loginPrefsEditor.putBoolean("saveLogin",true);
                     loginPrefsEditor.putString("email",email);
                     loginPrefsEditor.putString("password",password);
                     loginPrefsEditor.commit();
-                }else {
-                    loginPrefsEditor.clear();
-                    loginPrefsEditor.commit();
-                }
-                if(cb_atlogin.isChecked()){
-                    loginPrefsEditor.putBoolean("saveLogin",true);
-                    loginPrefsEditor.putString("email",email);
-                    loginPrefsEditor.putString("password",password);
-                    loginPrefsEditor.commit();
-                }else {
-                    loginPrefsEditor.clear();
-                    loginPrefsEditor.commit();
-                }
-
-
-
-
-                if(email.isEmpty() || password.isEmpty())
-                {
-                    tv_error.setText("*Field cannot be empty");
                 }else
+                {
+                    loginPrefsEditor.putBoolean("saveLogin",false);
+                    loginPrefsEditor.commit();
+                }
+
+                if(cb_atlogin.isChecked()){ //auto login is checked
+                    loginPrefsEditor.putBoolean("autoLogin",true);
+                    loginPrefsEditor.putString("email",email);
+                    loginPrefsEditor.putString("password",password);
+                    loginPrefsEditor.commit();
+                }else {
+                    loginPrefsEditor.putBoolean("autoLogin",false);
+                    loginPrefsEditor.commit();
+                }
+
+
+                if(email.isEmpty())
+                {
+                    et_email.setError("Field Required");
+                }else if(password.isEmpty())
+                {
+                    et_pass.setError("Field Required");
+                }
+                else
                 {
                     findViewById(R.id.loading).setVisibility(View.VISIBLE);
                     fireBaseAuthHelper.getAuth().signInWithEmailAndPassword(email,password)
@@ -101,6 +106,30 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loginPreferences= getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        loginPrefsEditor= loginPreferences.edit();
+
+        saveLogin= loginPreferences.getBoolean("saveLogin",false);
+        autoLogin = loginPreferences.getBoolean("autoLogin",false);
+
+        if(autoLogin)
+        {
+            cb_atlogin.setChecked(true);
+            Auth = FirebaseAuth.getInstance();
+            if(Auth.getCurrentUser()!=null){
+                startActivity(new Intent(this,MainActivity.class));
+                finish();
+            }
+        }else if(saveLogin){
+            et_email.setText(loginPreferences.getString("email",""));
+            et_pass.setText(loginPreferences.getString("password",""));
+            cb_savelogin.setChecked(true);
+        }
+    }
+
     private void initView()
     {
         fireBaseAuthHelper = new FireBaseAuthHelper();
@@ -111,20 +140,7 @@ public class LoginActivity extends AppCompatActivity {
         tv_error = findViewById(R.id.tv_login_error);
         cb_savelogin=findViewById(R.id.cb_savelogin);
         cb_atlogin=findViewById(R.id.cb_atlogin);
-        loginPreferences= getSharedPreferences("loginPrefs", MODE_PRIVATE);
-        loginPrefsEditor= loginPreferences.edit();
 
-        saveLogin= loginPreferences.getBoolean("saveLogin",false);
-        if(saveLogin == true){
-            et_email.setText(loginPreferences.getString("email",""));
-            et_pass.setText(loginPreferences.getString("password",""));
-            cb_savelogin.setChecked(true);
-        }
-        Auth = FirebaseAuth.getInstance();
-        if(Auth.getCurrentUser()!=null){
-            startActivity(new Intent(this,MainActivity.class));
-            finish();
-        }
     }
 
 

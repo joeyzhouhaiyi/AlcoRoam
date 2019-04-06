@@ -22,48 +22,13 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         android:paddingRight="16dp"
         android:layout_marginBottom="40dp"
         android:textAllCaps="false"
+        android:elevation="10dp"
         android:drawableLeft="@drawable/ic_bluetooth"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <TextView
-        android:id="@+id/GPS_lonView"
-        android:layout_width="274dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:gravity="center"
-        android:text="Longitude"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.699" />
 
-    <TextView
-        android:id="@+id/GPS_latView"
-        android:layout_width="274dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="Latitude"
-        android:gravity="center"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.781" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -80,77 +45,84 @@ xmlns:android="http://schemas.android.com/apk/res/android"
             android:textStyle="bold"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="32dp"
-            android:layout_marginBottom="40dp"/>
+            android:layout_marginBottom="10dp"/>
 
-        <TextView
-            android:id="@+id/txtVName"
+
+        <RelativeLayout
+            android:id="@+id/rl_tvs"
             android:layout_width="match_parent"
-            android:layout_height="32dp"
-            android:paddingLeft="16dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginBottom="8dp"
-            android:layout_below="@+id/ec_title"
-            android:background="@drawable/et_bg"
-            android:drawableLeft="@drawable/ic_user"
-            android:text="  Contact Name"
-            android:textColor="@color/app_white"
-            android:textSize="24sp"
-            android:layout_centerHorizontal="true"
-            />
-
-
-        <TextView
-            android:id="@+id/txtVEmail"
-            android:layout_width="match_parent"
-            android:layout_height="32dp"
-            android:paddingLeft="16dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginBottom="8dp"
-            android:layout_below="@+id/txtVName"
-            android:background="@drawable/et_bg"
-            android:drawableLeft="@drawable/ic_email"
-            android:text="  Contact Email"
-            android:textColor="@color/app_white"
-            android:textSize="24sp"
-            android:layout_centerHorizontal="true"/>
-
-        <TextView
-            android:id="@+id/txtVPhone"
-            android:layout_width="match_parent"
-            android:layout_height="32dp"
-            android:paddingLeft="16dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginBottom="8dp"
-            android:layout_below="@+id/txtVEmail"
-            android:background="@drawable/et_bg"
-            android:drawableLeft="@drawable/ic_phone"
-            android:text="  Contact Phone"
-            android:textColor="@color/app_white"
-            android:textSize="24sp"
-            android:layout_centerHorizontal="true"/>
-
-        <Button
-            android:id="@+id/contactInfo_btn"
-            style="@style/Base.Widget.AppCompat.Button.Colored"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/txtVPhone"
-            android:background="@drawable/btn_bg"
-            android:layout_centerHorizontal="true"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:drawableLeft="@drawable/ic_edit"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="32dp"
-            android:text="Edit Info"/>
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_below="@+id/ec_title">
+
+            <TextView
+                android:id="@+id/txtVName"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:paddingLeft="16dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/et_bg"
+                android:drawableLeft="@drawable/ic_user"
+                android:text="  Contact Name"
+                android:textColor="@color/app_white"
+                android:textSize="24sp"
+                android:layout_centerHorizontal="true"
+                />
+
+            <TextView
+                android:id="@+id/txtVEmail"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:paddingLeft="16dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginBottom="8dp"
+                android:layout_below="@+id/txtVName"
+                android:background="@drawable/et_bg"
+                android:drawableLeft="@drawable/ic_email"
+                android:text="  Contact Email"
+                android:textColor="@color/app_white"
+                android:textSize="24sp"
+                android:layout_centerHorizontal="true"/>
+
+            <TextView
+                android:id="@+id/txtVPhone"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:paddingLeft="16dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginBottom="8dp"
+                android:layout_below="@+id/txtVEmail"
+                android:background="@drawable/et_bg"
+                android:drawableLeft="@drawable/ic_phone"
+                android:text="  Contact Phone"
+                android:textColor="@color/app_white"
+                android:textSize="24sp"
+                android:layout_centerHorizontal="true"/>
+
+            <Button
+                android:id="@+id/contactInfo_btn"
+                style="@style/Base.Widget.AppCompat.Button.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtVPhone"
+                android:background="@drawable/btn_bg"
+                android:layout_centerHorizontal="true"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:drawableLeft="@drawable/ic_edit"
+                android:layout_margin="8dp"
+                android:text="Edit Info"/>
+        </RelativeLayout>
+
     </RelativeLayout>
 
 
@@ -171,4 +143,39 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.6" />
+
+    <TextView
+        android:id="@+id/tv_lastSeen"
+        android:layout_width="274dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="start"
+        android:text="Last seen at:"
+        android:textStyle="italic"
+        android:textColor="@color/app_white"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/GPSswitch"
+        app:layout_constraintVertical_bias="0.699" />
+
+    <TextView
+        android:id="@+id/tv_location"
+        android:layout_width="274dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="start"
+        android:text=""
+        android:textColor="@color/app_white"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_lastSeen"/>
 </android.support.constraint.ConstraintLayout>

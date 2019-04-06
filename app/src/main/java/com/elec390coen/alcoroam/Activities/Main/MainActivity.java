@@ -145,7 +145,8 @@ public class MainActivity extends AppCompatActivity {
     private boolean playTutorial()
     {
         SharedPreferences preferences = getSharedPreferences("LoginInfo",0);
-        boolean play = preferences.getBoolean("playTutorial",false);
+        boolean play = preferences.getBoolean("tut1",false);
+        preferences.edit().putBoolean("tut1",false).apply();
         return play;
     }
 
