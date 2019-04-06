@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -25,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.elec390coen.alcoroam.Activities.Setting.GPStracker;
+import com.elec390coen.alcoroam.Activities.Setting.SettingActivity;
 import com.elec390coen.alcoroam.Controllers.FireBaseAuthHelper;
 import com.elec390coen.alcoroam.Controllers.FireBaseDBHelper;
 import com.elec390coen.alcoroam.Models.GPSLocation;
@@ -44,6 +47,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 public class AlcoholActivity extends AppCompatActivity {
@@ -84,7 +88,7 @@ public class AlcoholActivity extends AppCompatActivity {
         myLocation = GPSLocation.getInstance();
         ableToDrive = Double.parseDouble(getString(R.string.driveLimit)); //driving limits
         veryDrunk = Double.parseDouble(getString(R.string.tooDrunk));      // you are too drunk
-        //saveLocation();
+        saveLocation();
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter("messageIntent"));
     }
 
@@ -106,6 +110,7 @@ public class AlcoholActivity extends AppCompatActivity {
                         currtest = maxReading;
                         maxReading=0;
                         UpdateGraph();
+                        currtest = 950;
                         testAlcoholLevel();
                     }
                 }, 10000);
@@ -211,6 +216,18 @@ public class AlcoholActivity extends AppCompatActivity {
             myLocation = GPSLocation.getInstance();
             myLocation.setLat(String.valueOf(lat));
             myLocation.setLon(String.valueOf(lon));
+            Geocoder geocoder;
+            List<Address> addresses;
+            geocoder = new Geocoder(AlcoholActivity.this, Locale.getDefault());
+
+            try{
+                addresses = geocoder.getFromLocation(lat, lon, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+
+                String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                myLocation.setLastSeen(address);
+            }catch (Exception ex){
+                Toast.makeText(AlcoholActivity.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         }else{
             Toast.makeText(this, "GPS Location is null", Toast.LENGTH_SHORT).show();
         }
@@ -235,9 +252,12 @@ public class AlcoholActivity extends AppCompatActivity {
 
                 }
             }
+            String ct = String.valueOf(currtest/1000);
             SmsManager.getDefault().sendTextMessage(contactNumber, null
-                    , "Hello "+contactName + ", my alcohol concentration is at: "+currtest/1000+"g/L. Can you please come pick me up at: ["
-                            + myLocation.getLastSeen()+"] as I am not allowed to drive!", null, null);
+                    , "Hello "+contactName + ", my alcohol level is at: "+ct+"g/L and I am not allowed to drive.(1/2)", null, null);
+            SmsManager.getDefault().sendTextMessage(contactNumber, null
+                    , "Can you please come pick me up at: "
+                            + myLocation.getLastSeen()+"? (2/2)", null, null);
         }
     }
 
