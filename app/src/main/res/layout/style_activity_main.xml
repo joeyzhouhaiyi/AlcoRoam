@@ -8,12 +8,12 @@
     tools:context=".Activities.Main.MainActivity">
 
     <Button
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:background="@drawable/ic_settings"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="30dp"
-        android:layout_marginRight="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
         android:id="@+id/btn_setting"
         android:elevation="15dp"/>
 
@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="70dp">
+        android:layout_marginTop="50dp">
         <TextView
             android:id="@+id/app_name"
             android:layout_width="wrap_content"
@@ -40,24 +40,20 @@
         android:id="@+id/main_l2"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_above="@id/ic_drivepic"
-        android:layout_marginBottom="40dp"
+        android:layout_above="@+id/ic_drivepic"
+        android:layout_marginBottom="20dp"
         android:layout_marginRight="30dp"
         android:layout_alignParentRight="true"
-        android:background="@color/app_white"
+        android:background="@drawable/btn_bg_round"
         android:elevation="10dp"
         >
-
-
         <Button
             android:id="@+id/btn_hrate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:background="@drawable/ic_hearteate"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:scaleY="1.1"/>
         <TextView
             android:layout_width="wrap_content"
@@ -77,17 +73,19 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_marginLeft="30dp"
-        android:background="@color/app_white"
-        android:layout_marginBottom="40dp"
+        android:background="@drawable/btn_bg_round"
+        android:layout_marginBottom="20dp"
         android:layout_above="@+id/ic_drivepic"
         android:elevation="10dp">
         <Button
             android:id="@+id/btn_alco"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="100dp"
+            android:layout_marginTop="20dp"
             android:background="@drawable/ic_altest"
             android:layout_centerHorizontal="true"
-            android:scaleY="0.9"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+
              />
         <TextView
             android:layout_width="wrap_content"
@@ -118,7 +116,7 @@
         android:textColor="@color/app_white"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="20dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="20dp"
         android:text="welcome,"
         android:textSize="16sp"/>
 

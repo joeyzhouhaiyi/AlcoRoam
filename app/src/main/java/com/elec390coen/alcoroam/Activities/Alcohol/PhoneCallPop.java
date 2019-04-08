@@ -55,6 +55,19 @@ public class PhoneCallPop extends Activity {
 
             }
         });
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+
+            if (checkSelfPermission(Manifest.permission.CALL_PHONE)
+                    == PackageManager.PERMISSION_DENIED) {
+
+                Log.d("permission", "permission denied to SEND_SMS - requesting it");
+                String[] permissions = {Manifest.permission.CALL_PHONE};
+
+                requestPermissions(permissions, PERMISSION_REQUEST_CODE);
+
+            }
+        }
         homeBTN = findViewById(R.id.btn_home);
 
         homeBTN.setOnClickListener(new View.OnClickListener() {
@@ -62,6 +75,7 @@ public class PhoneCallPop extends Activity {
             public void onClick(View v) {
 
                 String number = phoneNumber;
+
                 Intent intent = new Intent(Intent.ACTION_CALL);
                 intent.setData(Uri.parse("tel:" +number));
                 startActivity(intent);

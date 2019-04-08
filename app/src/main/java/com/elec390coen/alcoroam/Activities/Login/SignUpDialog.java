@@ -61,12 +61,15 @@ public class SignUpDialog extends Dialog {
                 if(email.isEmpty())
                 {
                     et_dialog_email.setError("Field Required");
+                    findViewById(R.id.dialog_loading).setVisibility(View.GONE);
                 }else if(password.isEmpty())
                 {
                     et_dialog_password.setError("Field Required");
+                    findViewById(R.id.dialog_loading).setVisibility(View.GONE);
                 }else if(nickname.isEmpty())
                 {
                     et_dialog_nickname.setError("Field Required");
+                    findViewById(R.id.dialog_loading).setVisibility(View.GONE);
                 }
                 else
                 {
@@ -103,6 +106,7 @@ public class SignUpDialog extends Dialog {
                     }else
                     {
                         et_dialog_password_re.setError("Password does not match");
+                        findViewById(R.id.dialog_loading).setVisibility(View.GONE);
                     }
                 }
             }

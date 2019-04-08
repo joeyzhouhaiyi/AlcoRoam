@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -40,8 +41,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
+import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.DataPointInterface;
 import com.jjoe64.graphview.series.LineGraphSeries;
+import com.jjoe64.graphview.series.OnDataPointTapListener;
+import com.jjoe64.graphview.series.PointsGraphSeries;
+import com.jjoe64.graphview.series.Series;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -55,18 +61,19 @@ public class AlcoholActivity extends AppCompatActivity {
     TextView tv_risk;
     ProgressBar pb_alcohol_level;
     Button record;
-    GraphView readingPlot;
-    LineGraphSeries series;
+
+    PointsGraphSeries series;
     Button btn_refresh_connection;
     ShowcaseView showcaseView;
 
     private StringBuilder recDataString = new StringBuilder();
     private static final int PERMISSION_REQUEST_CODE = 1;
-
+    GraphView readingPlot;
     List<TestResult> results = new ArrayList<>();
     FireBaseDBHelper fireBaseDBHelper;
     FireBaseAuthHelper fireBaseAuthHelper;
     GPSLocation myLocation;
+    StaticLabelsFormatter staticLabelsFormatter;
 
     private String contactName;
     private String contactNumber;
@@ -90,6 +97,19 @@ public class AlcoholActivity extends AppCompatActivity {
         veryDrunk = Double.parseDouble(getString(R.string.tooDrunk));      // you are too drunk
         saveLocation();
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter("messageIntent"));
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+
+            if (checkSelfPermission(Manifest.permission.CALL_PHONE)
+                    == PackageManager.PERMISSION_DENIED) {
+
+                Log.d("permission", "permission denied to SEND_SMS - requesting it");
+                String[] permissions = {Manifest.permission.CALL_PHONE};
+
+                requestPermissions(permissions, PERMISSION_REQUEST_CODE);
+
+            }
+        }
+
     }
 
     private void setButtonListener() {
@@ -104,16 +124,15 @@ public class AlcoholActivity extends AppCompatActivity {
                         ll.setVisibility(View.GONE);
                         testButtonPressed = false;
                         counter=0;
-                        pb_alcohol_level.setProgress((int) maxReading / 10);
+                        pb_alcohol_level.setProgress((int) (maxReading*1000));
                         setRiskLevel(maxReading);
-                        viewData.setText(String.valueOf(maxReading / 1000) + "g/L");    //update the textviews with sensor values
+                        viewData.setText(String.valueOf(maxReading) + "mg/dL");    //update the textviews with sensor values
                         currtest = maxReading;
                         maxReading=0;
                         UpdateGraph();
-                        currtest = 950;
                         testAlcoholLevel();
                     }
-                }, 10000);
+                }, 8000);
                 ll.setVisibility(View.VISIBLE);
                 Animation animFadeIn = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.mytransition);
                 ll.startAnimation(animFadeIn);
@@ -138,19 +157,21 @@ public class AlcoholActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 int index = 0;
+
                 readingPlot.removeAllSeries();
-                series = new LineGraphSeries();
-                readingPlot.addSeries(series);
+                List<Date> xlabel = new ArrayList();
                 DataPoint[] dp = new DataPoint[(int)dataSnapshot.getChildrenCount()];
                 results.clear();
+                SimpleDateFormat formater = new SimpleDateFormat("dd/MM hh:mm:ss");
                 for (DataSnapshot readingSnapshot: dataSnapshot.getChildren()) {
                     TestResult t = readingSnapshot.getValue(TestResult.class);
                     results.add(t);
                     String time = t.getTime();
-                    SimpleDateFormat formater = new SimpleDateFormat("dd/MM hh:mm:ss");
+
+
                     try {
                         Date x = formater.parse(time);
-
+                        xlabel.add(x);
                         double y = Double.parseDouble(t.getReading());
                         dp[index] = new DataPoint(x,y);
                         index++;
@@ -159,8 +180,29 @@ public class AlcoholActivity extends AppCompatActivity {
                         Log.d("TAG",ex.getLocalizedMessage());
                     }
                 }
-                if(series!=null)
-                series.resetData(dp);
+
+                if(xlabel.size()!=0)
+                {
+                    readingPlot.getViewport().setXAxisBoundsManual(true);
+                    readingPlot.getViewport().setMinX(xlabel.get(0).getTime());
+                    readingPlot.getViewport().setMaxX(xlabel.get(xlabel.size()-1).getTime());
+                }
+                series = new PointsGraphSeries<>(dp);
+                series.setOnDataPointTapListener(new OnDataPointTapListener() {
+                    @Override
+                    public void onTap(Series series, DataPointInterface dataPoint) {
+                        SimpleDateFormat formater = new SimpleDateFormat("dd/MM hh:mm:ss");
+                        try
+                        {
+                            Date d = new Date((long) dataPoint.getX());
+                            String currentTimeStamp = formater.format(d.getTime());
+                            Toast.makeText(AlcoholActivity.this,currentTimeStamp , Toast.LENGTH_SHORT).show();
+                        }catch (Exception e){}
+
+
+                    }
+                });
+                readingPlot.addSeries(series);
             }
 
             @Override
@@ -182,24 +224,33 @@ public class AlcoholActivity extends AppCompatActivity {
         viewData = findViewById(R.id.tv_response);
         tv_risk = findViewById(R.id.tv_riskLevel);
         pb_alcohol_level = findViewById(R.id.pb_alcohol_level);
+
         btn_refresh_connection = findViewById(R.id.btn_refresh_connection);
         fireBaseDBHelper = new FireBaseDBHelper();
         fireBaseAuthHelper = new FireBaseAuthHelper();
         record=findViewById(R.id.recordAlco);
         readingPlot = findViewById(R.id.alcoView);
-        readingPlot.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(this,new SimpleDateFormat("dd/MM\nhh:mm:ss")));
-        readingPlot.getGridLabelRenderer().setNumHorizontalLabels(4);
-        readingPlot.getGridLabelRenderer().setHumanRounding(true);
+        readingPlot.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(AlcoholActivity.this,new SimpleDateFormat("dd/MM\nhh:mm:ss")));
+        readingPlot.getGridLabelRenderer().setHorizontalLabelsVisible(false);
+        readingPlot.getGridLabelRenderer().setHumanRounding(false,true);
+        readingPlot.getViewport().setYAxisBoundsManual(true);
+        readingPlot.getViewport().setMinY(0);
+        readingPlot.getViewport().setMaxY(0.1);
+        readingPlot.getViewport().scrollToEnd();
+
     }
 
     public void setRiskLevel(double reading) {
-        if (reading < 500.00) {
+        if (reading < 0.05) {
             tv_risk.setText("Risk: LOW");
-        } else if (reading >= 500.0 && reading < 800.0) {
+        } else if (reading >= 0.05 && reading < 0.08) {
+            tv_risk.setTextColor(Color.YELLOW);
             tv_risk.setText("Risk: MEDIUM");
-        } else if (reading >= 800 && reading < 900) {
+        } else if (reading >= 0.08 && reading < 0.09) {
+            tv_risk.setTextColor(Color.RED);
             tv_risk.setText("Risk: HIGH!");
         } else {
+            tv_risk.setTextColor(Color.BLACK);
             tv_risk.setText("Risk: VERY HIGH!!!!!");
         }
 
@@ -238,23 +289,10 @@ public class AlcoholActivity extends AppCompatActivity {
         if (currtest > ableToDrive && currtest < veryDrunk) {
             Intent i = new Intent(getApplicationContext(), PhoneCallPop.class);
             startActivity(i);
-
         } else if (currtest > veryDrunk) {
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
 
-                if (checkSelfPermission(Manifest.permission.SEND_SMS)
-                        == PackageManager.PERMISSION_DENIED) {
-
-                    Log.d("permission", "permission denied to SEND_SMS - requesting it");
-                    String[] permissions = {Manifest.permission.SEND_SMS};
-
-                    requestPermissions(permissions, PERMISSION_REQUEST_CODE);
-
-                }
-            }
-            String ct = String.valueOf(currtest/1000);
             SmsManager.getDefault().sendTextMessage(contactNumber, null
-                    , "Hello "+contactName + ", my alcohol level is at: "+ct+"g/L and I am not allowed to drive.(1/2)", null, null);
+                    , "Hello "+contactName + ", my alcohol level is at: "+currtest+"mg/dL and I am not allowed to drive.(1/2)", null, null);
             SmsManager.getDefault().sendTextMessage(contactNumber, null
                     , "Can you please come pick me up at: "
                             + myLocation.getLastSeen()+"? (2/2)", null, null);
@@ -262,19 +300,19 @@ public class AlcoholActivity extends AppCompatActivity {
     }
 
 
-    //get the max result every 8s and save it to database
+    //get the max result every 4s and save it to database
     private static int counter = 0;
     private double maxReading = 0;
 
     private void getMaxData(String reading) {
-        if (counter < 8) {
+        if (counter < 4) {
             double thisReading = Double.parseDouble(reading);
             if (thisReading > maxReading) {
                 maxReading = thisReading;
             }
         } else {
             counter = 0;
-            if (results.size() == 8)
+            if (results.size() == 4)
                 results.remove(0);
 
             results.add(new TestResult(getCurrentTime(), String.valueOf(maxReading), "Alcohol"));
@@ -297,14 +335,20 @@ public class AlcoholActivity extends AppCompatActivity {
                     String alcoholReading="";
                     if(AlcoholReadingStartingPointIndex>=0)
                     alcoholReading = recDataString.substring(AlcoholReadingStartingPointIndex, endOfLineIndex);    // extract string
-                    int dataLength = alcoholReading.length();                          //get length of data received
-                    if (alcoholReading.charAt(0) == '#')                             //if it starts with # we know it is what we are looking for
+                    int dataLength = alcoholReading.length();
+                    if(alcoholReading.length()!=0)
                     {
-                        String alcoholReadingInString = alcoholReading.substring(1, dataLength);
-                        double reading = Double.parseDouble(alcoholReadingInString);
-                        getMaxData(alcoholReadingInString);
-                        currtest = reading;
+                        //get length of data received
+                        if (alcoholReading.charAt(0) == '#')                             //if it starts with # we know it is what we are looking for
+                        {
+                            String alcoholReadingInString = alcoholReading.substring(1, dataLength);
+                            double reading = Double.parseDouble(alcoholReadingInString);
+                            reading/=10000;
+                            getMaxData(String.valueOf(reading));
+                            currtest = reading;
+                        }
                     }
+
                     recDataString.delete(0, recDataString.length());                    //clear all string data
                 }
             }

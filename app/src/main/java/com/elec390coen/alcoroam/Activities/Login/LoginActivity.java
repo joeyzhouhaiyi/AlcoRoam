@@ -117,6 +117,11 @@ public class LoginActivity extends AppCompatActivity {
 
         if(autoLogin)
         {
+            if(saveLogin){
+                et_email.setText(loginPreferences.getString("email",""));
+                et_pass.setText(loginPreferences.getString("password",""));
+                cb_savelogin.setChecked(true);
+            }
             cb_atlogin.setChecked(true);
             Auth = FirebaseAuth.getInstance();
             if(Auth.getCurrentUser()!=null){

@@ -52,17 +52,16 @@
             android:layout_width="match_parent"
             android:layout_height="92dp"
             android:gravity="center"
-            android:text=""
+            android:layout_marginTop="-10dp"
+            android:text="0BPM"
             android:textSize="26sp"
             android:layout_gravity="center"
-            android:layout_marginBottom="-10dp"
             android:textColor="@color/app_white"
             android:textStyle="bold"
             android:elevation="10dp"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            tools:layout_editor_absoluteY="282dp" />
+            app:layout_constraintRight_toRightOf="parent"/>
     </FrameLayout>
 
     <LinearLayout

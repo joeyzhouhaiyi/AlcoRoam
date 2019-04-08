@@ -47,7 +47,7 @@ public class HeartActivity extends AppCompatActivity {
     GraphView gv_heart;
     private LineGraphSeries<DataPoint> series;
     static int second=0;
-
+    boolean gettingHR=false;
     private Button getHeartRate;
     BluetoothAdapter adapter = null;
     BTClient _bt;
@@ -130,7 +130,9 @@ public class HeartActivity extends AppCompatActivity {
 
                     if(_bt.IsConnected())
                     {
+                        if(!gettingHR)
                         _bt.start();
+                        gettingHR = true;
                         TextView tv = findViewById(R.id.connectionStsView);
                         String ErrorText  = "Connected to HxM "+DeviceName;
                         tv.setText(ErrorText);

@@ -18,8 +18,8 @@
     <string name="mount_notice">*Note that if you mount your device to incorrect slot, the device will not functioning properly</string>
     <string name="alcohol">Alcohol</string>
     <string name="heart">Heart Rate</string>
-    <string name="driveLimit">800</string>
-    <string name="tooDrunk">900</string>
+    <string name="driveLimit">0.08</string>
+    <string name="tooDrunk">0.088</string>
     <string name="nickname">Nickname</string>
     <string name="emergency_contact">Emergency Contact</string>
     <string name="empty"></string>

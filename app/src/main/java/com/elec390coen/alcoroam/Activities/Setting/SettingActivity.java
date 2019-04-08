@@ -122,12 +122,11 @@ public class SettingActivity extends AppCompatActivity {
         if(playTutorial())
         {
             showcaseView = new ShowcaseView.Builder(this)
-                    .setTarget(new ViewTarget(R.id.rl_tvs,this))
+                    .setTarget(new ViewTarget(R.id.contactInfo_btn,this))
                     .setContentTitle("Emergency Contact")
                     .setContentText("Here you can save your emergency contact's information. This is very important!")
                     .withHoloShowcase()
                     .setStyle(R.style.ShowcaseView_custom)
-                    .blockAllTouches()
                     .setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -169,7 +168,10 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     public void openDialog() {
-        new InfoDialog(this).show();
+        InfoDialog info = new InfoDialog(this);
+        info.setCanceledOnTouchOutside(false);
+        info.setCancelable(false);
+        info.show();
 
     }
 

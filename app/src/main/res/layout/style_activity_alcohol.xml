@@ -44,7 +44,7 @@
 
 
     <FrameLayout
-        android:layout_width="wrap_content"
+        android:layout_width="160dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/recordAlco"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -84,7 +84,7 @@
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
         android:layout_marginBottom="40dp"
-        android:progress="25"
+        android:progress="0"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -96,19 +96,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="0 g/L"
+        android:text="0 mg/dL"
         android:textColor="@color/app_white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/pb_alcohol_level"
         app:layout_constraintTop_toBottomOf="@+id/pb_alcohol_level"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="1g/L"
+        android:text="0.1mg/dL"
         android:textColor="@color/app_white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/pb_alcohol_level"
